@@ -88,12 +88,43 @@ struct SidebarView: View {
         } detail: {
             switch selectedSideBar {
             case .collections:
-                if let request = Binding($selectionRequest) {
-                    RequestDetailView(request: request)
+                if let selectedRequest = selectionRequest {
+                    if selectedRequest.data != nil {
+                        RequestDetailView(request: Binding(
+                            get: { selectedRequest },
+                            set: { selectionRequest = $0 }
+                        ))
+                    } else {
+                        VStack(alignment: .leading) {
+                            Text("Overview").font(.title).bold()
+                            HStack(alignment: .top) {
+                                Text(selectedRequest.description ?? "")
+                                Spacer()
+                            }
+                            Spacer()
+                        }.padding()
+                    }
+
                 } else {
-                    ContentUnavailableView("No request selected", systemImage: "xmark")
-                    // TODO: create new request
+                    ContentUnavailableView(
+                        "No Request Selected",
+                        systemImage: "doc.text.magnifyingglass",
+                        description: Text("Select a request to view details")
+                    )
                 }
+//                if let request = Binding($selectionRequest) {
+//                    RequestDetailView(request: request)
+//                } else {
+//                    VStack(alignment: .center) {
+//                        HStack(alignment: .center) {
+//                            VStack {
+//                                Button("Create a new request") {}
+//                            }
+//                        }
+//                    }
+            ////                    ContentUnavailableView("No request selected", systemImage: "xmark")
+//                    // TODO: create new request
+//                }
             case .environments:
                 Text("Environments \(appState.selectedEnvironment)")
             }
