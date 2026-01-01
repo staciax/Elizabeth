@@ -14,6 +14,7 @@ import SwiftUI
 
 //    var selectionEnvironment: EnvironmentInfo?
     var selectedCollection: CollectionInfo?
+    var selectedHttpRequest: HTTPRequest?
 
     var collections: [CollectionInfo] = []
 
@@ -23,13 +24,8 @@ import SwiftUI
             collections.append(CollectionInfo(
                 name: String(index),
                 requests: [
-                    RequestInfo(method: .get, url: "https://test.com", name: "Get User"),
-                    RequestInfo(method: .post, url: "https://test.com", name: "Create Users"),
-                    RequestInfo(method: .put, url: "https://test.com", name: "Update User"),
-                    RequestInfo(method: .patch, url: "https://test.com", name: "Update User"),
-                    RequestInfo(method: .delete, url: "https://test.com", name: "Delete User"),
-                    RequestInfo(method: .head, url: "https://test.com", name: "Ping"),
-                    RequestInfo(method: .options, url: "https://test.com", name: "Options Users")
+                ],
+                httpRequets: [
                 ]
             ))
         }
@@ -57,6 +53,7 @@ struct SidebarView: View {
     @State var appState = AppState()
 
     @State var selectedSideBar: SideBarItem = .collections
+    @State var selectionRequest: RequestItem?
 
     @State var visibility: NavigationSplitViewVisibility = .automatic
 
@@ -82,7 +79,7 @@ struct SidebarView: View {
         } content: {
             switch selectedSideBar {
             case .collections:
-                CollectionView(appState: appState)
+                CollectionView(appState: appState, selectionRequest: $selectionRequest)
             case .environments:
                 EnvironmentView2(appState: appState)
             }
@@ -91,12 +88,15 @@ struct SidebarView: View {
         } detail: {
             switch selectedSideBar {
             case .collections:
-                Text("Collections")
+                if let request = Binding($selectionRequest) {
+                    RequestDetailView(request: request)
+                } else {
+                    ContentUnavailableView("No request selected", systemImage: "xmark")
+                    // TODO: create new request
+                }
             case .environments:
                 Text("Environments \(appState.selectedEnvironment)")
             }
-//            EmptyView()
-//            ContentUnavailableView("test", image: "plus")
         }.toolbar {
             ToolbarItem {
                 Picker(appState.selectedEnvironment, selection: $appState.selectedEnvironment) {
@@ -122,16 +122,9 @@ struct SidebarView: View {
             ToolbarItem {
                 Button(action: sendHttpRequest) {
                     Label("Save", systemImage: "play.fill")
-                }.disabled(selectedSideBar == .collections)
+                }
+                .disabled(selectedSideBar == .collections)
             }
-//            }
-//            ToolbarItem {
-//                Button(action: {
-//                    $visibility.wrappedValue = .detailOnly
-//                }) {
-//                    Label("Full", systemImage: "rectangle.expand.diagonal")
-//                }
-//            }
         }
 //        .navigationSplitViewStyle(.prominentDetail)
     }
