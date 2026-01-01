@@ -123,7 +123,9 @@ struct SidebarView: View {
                 Button(action: sendHttpRequest) {
                     Label("Save", systemImage: "play.fill")
                 }
-                .disabled(selectedSideBar == .collections)
+                .disabled(
+                    selectedSideBar != .collections || selectionRequest?.data == nil
+                )
             }
         }
 //        .navigationSplitViewStyle(.prominentDetail)
