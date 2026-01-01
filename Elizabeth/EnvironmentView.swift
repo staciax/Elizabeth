@@ -121,7 +121,7 @@ struct EnvironmentDetailView2: View {
 }
 
 #Preview {
-    var appState = AppState()
+    let appState = AppState()
     EnvironmentView2(appState: appState)
 //    EnvironmentDetailView2()
 }
