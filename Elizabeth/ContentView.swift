@@ -27,6 +27,24 @@ struct RequestInfo: Identifiable {
     @State var name: String = "New Request"
 }
 
+struct HTTPRequest: Identifiable {
+    let id = UUID()
+    var method: HTTPMethod
+    var url: String
+    var name: String
+    let headers: [String: String]
+    let bodyContent: String?
+}
+
+struct HTTPRequestItem {
+    let id = UUID()
+    var name = "New Request"
+    var description: String?
+
+    var data: HTTPRequest?
+    var children: [HTTPRequestItem]?
+}
+
 func getMethodColor(_ httpMethod: HTTPMethod) -> Color {
     switch httpMethod {
     case .get:
