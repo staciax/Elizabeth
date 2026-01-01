@@ -44,6 +44,27 @@ struct RequestDetailView: View {
                         print("Panel changed from \(oldValue) to \(newValue)!")
                     }.pickerStyle(.segmented)
                 }
+
+                // pane
+                switch selectedPane {
+                case .docs:
+                    VStack {
+                        if let description = request.description, !description.isEmpty {
+                            Text(description)
+                        }
+                    }.padding()
+                case .params:
+                    Text("params")
+//                      // TODO: table
+                case .auth:
+                    Text("auth")
+                case .headers:
+                    Text("headers")
+                // TODO: table
+                case .body:
+                    Text("body")
+                }
+
                 Spacer()
             } else {
                 // folder
