@@ -99,40 +99,22 @@ struct CollectionView: View {
 
     var body: some View {
         VStack {
-            List(selection: $selectionRequest) {
-                OutlineGroup(items, children: \.children) { item in
-                    HStack {
-                        if item.children != nil {
-                            Image(systemName: "folder").foregroundColor(.gray)
-                        }
-                        if let data = item.data {
-                            Text(data.method.rawValue.uppercased())
-                                .bold()
-                                .foregroundColor(getMethodColor(data.method))
-                        }
-                        Text(item.name)
-                            .font(item.children == nil ? .body : .headline)
+            List(items, children: \.children, selection: $selectionRequest) { item in
+                HStack {
+                    if item.children != nil {
+                        Image(systemName: "folder").foregroundColor(.gray)
                     }
-                    .tag(item)
-                    .padding(.vertical, 4)
+                    if let data = item.data {
+                        Text(data.method.rawValue.uppercased())
+                            .bold()
+                            .foregroundColor(getMethodColor(data.method))
+                    }
+                    Text(item.name)
+                        .font(item.children == nil ? .body : .headline)
                 }
+                .tag(item)
+                .padding(.vertical, 4)
             }
-//            List(items, children: \.children, selection: $selectionRequest) { item in
-//                HStack {
-//                    if item.children != nil {
-//                        Image(systemName: "folder").foregroundColor(.gray)
-//                    }
-//                    if let data = item.data {
-//                        Text(data.method.rawValue.uppercased())
-//                            .bold()
-//                            .foregroundColor(getMethodColor(data.method))
-//                    }
-//                    Text(item.name)
-//                        .font(item.children == nil ? .body : .headline)
-//                }
-//                .tag(item)
-//                .padding(.vertical, 4)
-//            }
         }
     }
 }
