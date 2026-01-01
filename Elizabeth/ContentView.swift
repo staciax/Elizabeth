@@ -32,11 +32,11 @@ func getMethodColor(_ httpMethod: HTTPMethod) -> Color {
     case .get:
         return Color.green
     case .post:
-        return Color.blue
+        return Color.yellow
     case .put:
-        return Color.purple
+        return Color.blue
     case .patch:
-        return Color.red
+        return Color.purple
     case .delete:
         return Color.orange
     case .head:
