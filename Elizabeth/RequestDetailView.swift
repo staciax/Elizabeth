@@ -20,6 +20,19 @@ struct RequestDetailView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
+//            ScrollView(.horizontal, showsIndicators: false) {
+//                LazyHStack(alignment: .center) {
+//                    ForEach(1 ... 5, id: \.self) { _ in
+//                        Group {
+//                            Button {} label: {
+//                                Text("GET").foregroundColor(getMethodColor(.get)).bold()
+//                                Text("New Request")
+//                            }.buttonStyle(.bordered)
+//                        }
+//                    }
+//                }
+//            }.scaledToFit()
+//            Divider()
             if request.data != nil {
                 Text(request.name)
                 HStack {
@@ -33,22 +46,22 @@ struct RequestDetailView: View {
                     TextField("Enter URL", text: makeUrlBinding())
                         .textFieldStyle(.roundedBorder)
                 }
-                VStack {
-                    Picker("Pane", selection: $selectedPane) {
-                        ForEach(PanePanel.allCases) { pane in
-                            Text(pane.rawValue.capitalized)
-                        }
+
+                Picker("Pane", selection: $selectedPane) {
+                    ForEach(PanePanel.allCases) { pane in
+                        Text(pane.rawValue.capitalized)
                     }
-                    .labelsHidden()
-                    .onChange(of: selectedPane) { oldValue, newValue in
-                        print("Panel changed from \(oldValue) to \(newValue)!")
-                    }.pickerStyle(.segmented)
+                }
+                .labelsHidden()
+                .pickerStyle(.segmented)
+                .onChange(of: selectedPane) { oldValue, newValue in
+                    print("Panel changed from \(oldValue) to \(newValue)!")
                 }
 
                 // pane
                 switch selectedPane {
                 case .docs:
-                    VStack {
+                    Group {
                         if let description = request.description, !description.isEmpty {
                             Text(description)
                         }
@@ -63,6 +76,16 @@ struct RequestDetailView: View {
                 // TODO: table
                 case .body:
                     Text("body")
+                }
+
+//                TODO: reponse here ?
+
+                ScrollView {
+                    Text("test")
+                        .font(.system(.body, design: .monospaced))
+                        .textSelection(.enabled)
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
                 Spacer()
@@ -101,7 +124,7 @@ struct RequestDetailView: View {
         id: UUID(),
         name: "Test name",
         description: "Test Description",
-        data: RequestData(method: .delete, url: "localhost/v1/test")
+        data: RequestData(method: .delete, url: "https://httpbin.org/get")
     )
     RequestDetailView(request: $request)
 }
