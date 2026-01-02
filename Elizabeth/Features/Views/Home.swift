@@ -34,15 +34,10 @@ extension Flavor {
     }
 }
 
-enum PanePanel: String, CaseIterable, Identifiable {
-    case params, auth, headers, body
-    var id: Self { self }
-}
-
-func sendHttpRequest() {
-//    let response = await AF.request("https://httpbin.org/get")
-//    print(response)
-}
+// enum PanePanel: String, CaseIterable, Identifiable {
+//    case params, auth, headers, body
+//    var id: Self { self }
+// }
 
 struct Person: Identifiable {
     let givenName: String
@@ -104,7 +99,12 @@ struct Home: View {
 //                    .font(.largeTitle)
                 TextField("Name", text: $name)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                Button(action: sendHttpRequest) {
+                Button {
+                    print("test")
+//                    Task {
+                    ////                        await sendHttpRequest()
+//                    }
+                } label: {
                     Label("Save", systemImage: "square.and.arrow.down")
                 }.disabled(isSaved)
 //                Button("Save", action: sendHttpRequest).padding(.horizontal, 4)
@@ -125,14 +125,13 @@ struct Home: View {
                 TextField("Enter URL", text: $url)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
 //                    .padding()
-                Button("Send", action: sendHttpRequest).padding(.horizontal, 4)
+//                Button("Send", action: sendHttpRequest).padding(.horizontal, 4)
             }.frame(maxWidth: .infinity)
 
             VStack {
                 Picker("Pane", selection: $selectedPane) {
                     ForEach(PanePanel.allCases) { pane in
                         Text(pane.rawValue.capitalized)
-//                        Text(pane.rawValue.capitalized)
                     }
                 }
                 .labelsHidden()
