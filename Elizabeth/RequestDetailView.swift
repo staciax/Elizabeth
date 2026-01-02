@@ -104,9 +104,43 @@ struct Header: Identifiable {
 
 struct RequestDetailView: View {
     @Binding var request: RequestItem
+    @Binding var response: HTTPRequestResult?
 
     // state
     @State private var selectedPane: PanePanel = .docs
+    @State private var selectedPanel: RequestDetailPanel = .request
+    @State private var selectedAuthType: AuthType = .none
+    @State private var selectedBodyType: BodyType = .formData
+    @State private var bodyRaw: String = ""
+
+    // auth basic
+    @State private var username: String = ""
+    @State private var password: String = ""
+
+    // auth oauth
+    @State private var oauthToken: String = ""
+    @State private var oauthPrefix: String = "Bearer"
+
+    // test
+    @State private var params = [
+        Param(key: "test key", value: "test value"),
+        Param(key: "test key 2", value: "test value"),
+        Param(key: "test key 3", value: "test value"),
+        Param(key: "test key 3", value: "test value"),
+        Param(key: "test key 3", value: "test value"),
+    ]
+    @State private var headers = [
+        Header(key: "test key", value: "test value"),
+        Header(key: "test key 2", value: "test value"),
+        Header(key: "test key 3", value: "test value"),
+        Header(key: "test key 3", value: "test value"),
+        Header(key: "test key 3", value: "test value"),
+    ]
+
+//    @State private var params: [String: String] = [:]
+
+    @State private var longText = "This text can be edited by the user."
+    @State private var lineCount: Int = 1
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -151,34 +185,170 @@ struct RequestDetailView: View {
                 // pane
                 switch selectedPane {
                 case .docs:
-                    Group {
+                    VStack(alignment: .leading) {
                         if let description = request.description, !description.isEmpty {
-                            Text(description)
+                            Text(description).padding(.vertical, 4)
                         }
-                    }.padding()
+                    }
                 case .params:
-                    Text("params")
+                    VStack(alignment: .leading) {
+                        Text("Query Params").padding(.vertical, 4)
+                        HStack {
+                            Text("Key")
+                            Spacer()
+                            Text("Value")
+                            Spacer()
+                        }
+                        List($params) { param in
+                            HStack(spacing: 2) {
+                                TextField("", text: param.key)
+                                Spacer()
+                                TextField("", text: param.value)
+                            }
+                        }
+                    }
+//                    Table(params) {
+//                        TableColumn("Key", value: \.key)
+//                        TableColumn("Value", value: \.value)
+//                    }
+//                    Table(params) {
+                ////                        TableColumn("Key", value: \.key)
+                ////                        TableColumn("Value", value: \.value)
+//                    }
 //                      // TODO: table
                 case .auth:
-                    Text("auth")
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Picker("", selection: $selectedAuthType) {
+                                ForEach(AuthType.allCases, id: \.self) {
+                                    Text($0.rawValue).tag($0)
+                                }
+                            }
+                            .labelsHidden()
+                            .fixedSize()
+                            .pickerStyle(.segmented)
+                        }
+                        switch selectedAuthType {
+                        case .none:
+                            EmptyView()
+
+                        case .basic:
+                            HStack {
+                                Text("Username").frame(maxWidth: 85, alignment: .leading)
+                                TextField(
+                                    "Username",
+                                    text: $username
+                                )
+                            }
+                            HStack {
+                                Text("Password").frame(maxWidth: 85, alignment: .leading)
+                                TextField(
+                                    "Username",
+                                    text: $password
+                                )
+                            }
+
+                        case .oauth:
+                            HStack {
+                                Text("Token").frame(maxWidth: 85, alignment: .leading)
+                                TextField(
+                                    "Token",
+                                    text: $oauthToken
+                                )
+                            }
+                            HStack {
+                                Text("Header Prefix").frame(maxWidth: 85, alignment: .leading)
+                                TextField(
+                                    "e.g. Bearer",
+                                    text: $oauthPrefix
+                                )
+                            }
+                        }
+                    }
                 case .headers:
-                    Text("headers")
+                    VStack(alignment: .leading) {
+                        Text("Headers").padding(.vertical, 4)
+                        HStack {
+                            Text("Key")
+                            Spacer()
+                            Text("Value")
+                            Spacer()
+                        }
+                        List($headers) { header in
+                            HStack(spacing: 2) {
+                                TextField("", text: header.key)
+                                Spacer()
+                                TextField("", text: header.value)
+                            }
+                        }
+                    }
                 // TODO: table
                 case .body:
-                    Text("body")
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Picker("", selection: $selectedBodyType) {
+                                ForEach(BodyType.allCases, id: \.self) {
+                                    Text($0.rawValue).tag($0)
+                                }
+                            }
+                            .labelsHidden()
+                            .fixedSize()
+                            .pickerStyle(.segmented)
+                        }
+                        switch selectedBodyType {
+                        case .formData:
+                            Text("Text for form data")
+                        case .raw:
+                            TextEditor(text: $bodyRaw)
+                                .font(.system(size: 13, design: .monospaced))
+                                .scrollContentBackground(.hidden)
+                                .background(Color(white: 0.1))
+                                .foregroundColor(Color(white: 0.9))
+                                .padding(.vertical, 8)
+                        }
+//
+                    }
                 }
 
 //                TODO: reponse here ?
 
-                ScrollView {
-                    Text("test")
-                        .font(.system(.body, design: .monospaced))
-                        .textSelection(.enabled)
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                if response != nil {
+                    VStack {
+                        LineNumberCodeView(content: response?.data ?? "")
+                            .padding(.vertical, 4)
+                        Spacer()
+                    }
+
+//                    ScrollView {
+//
+//
+                    ////                        Text(response?.data ?? "")
+                    ////                            .font(.system(.body, design: .monospaced))
+                    ////                            .textSelection(.enabled)
+                    ////
+                    ////                            .frame(maxWidth: .infinity, alignment: .leading)
+//                    }
                 }
+//                TextEditor(text: $longText)
+//                    .padding()
+//                    .font(.body)
+//                    .foregroundColor(.primary)
+//                    .allowsHitTesting(false)
+//                    .focusable(false)
 
                 Spacer()
+
+//                HStack {
+//                    Picker("", selection: $selectedPanel) {
+//                        ForEach(RequestDetailPanel.allCases, id: \.self) {
+//                            Text($0.rawValue.capitalized).tag($0)
+//                        }
+//                    }
+//                    .labelsHidden()
+//                    .fixedSize()
+//                    .pickerStyle(.segmented)
+//                }
+//                .frame(maxWidth: .infinity)
             } else {
                 // folder
                 Text("Else")
@@ -216,5 +386,6 @@ struct RequestDetailView: View {
         description: "Test Description",
         data: RequestData(method: .delete, url: "https://httpbin.org/get")
     )
-    RequestDetailView(request: $request)
+    @Previewable @State var response: HTTPRequestResult?
+    RequestDetailView(request: $request, response: $response)
 }
