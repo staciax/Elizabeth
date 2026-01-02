@@ -5,9 +5,26 @@
 //  Created by STACiA on 28/12/2568 BE.
 //
 
+import Combine
 import SwiftUI
 
+// class AppContext: ObservableObject {
+//    @Published var environment: String = "Globals"
+// }
+
 // TODO: List nested for collection request
+// TODO: Split file for someview
+
+// MARK: Collection
+
+struct CollectionInfo: Identifiable {
+    let id = UUID()
+    @State var name: String
+
+    var requests: [RequestInfo]
+    var httpRequets: [HTTPRequest]
+//    var items: [HTTPRequestItem]
+}
 
 struct RequestDetails: View {
     let requestId: UUID
@@ -64,14 +81,29 @@ func getMethodColor(_ httpMethod: HTTPMethod) -> Color {
     }
 }
 
+struct MenuItem: Identifiable {
+    let id = UUID() // Use a unique identifier
+    let name: String
+    var subMenuItems: [MenuItem]? // Optional array of children
+}
+
 struct ContentView: View {
     @State private var selection: Int? = 1
     @State private var requestSelection: UUID?
     @State private var searchText = ""
 
-    // environments
+    // test environments
+    // TODO: use app context in stead of state
     @State private var environments: [String] = ["Globals", "Local", "Production"]
-    @State private var environmentSelection: String = "Globals"
+    @State private var selectedEnvironment: String = "Globals"
+
+    // test new env
+
+    // test collection
+    @State private var selectedCollection: UUID?
+    @State private var showingCollectionAlert = false
+    @State private var collectionNameInput = ""
+    @State private var visibility: NavigationSplitViewVisibility = .automatic
 
     // for test
     let items = ["Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape"]
@@ -83,110 +115,59 @@ struct ContentView: View {
         }
     }
 
-    var requests: [RequestInfo] = [
+    @State private var requests: [RequestInfo] = [
         RequestInfo(method: .get, url: "https://test.com", name: "Get User"),
         RequestInfo(method: .post, url: "https://test.com", name: "Create Users"),
         RequestInfo(method: .put, url: "https://test.com", name: "Update User"),
         RequestInfo(method: .patch, url: "https://test.com", name: "Update User"),
         RequestInfo(method: .delete, url: "https://test.com", name: "Delete User"),
         RequestInfo(method: .head, url: "https://test.com", name: "Ping"),
-        RequestInfo(method: .options, url: "https://test.com", name: "Options Users"),
-        RequestInfo(method: .get, url: "https://test.com", name: "Get User"),
-        RequestInfo(method: .post, url: "https://test.com", name: "Create Users"),
-        RequestInfo(method: .put, url: "https://test.com", name: "Update User"),
-        RequestInfo(method: .patch, url: "https://test.com", name: "Update User"),
-        RequestInfo(method: .delete, url: "https://test.com", name: "Delete User"),
-        RequestInfo(method: .head, url: "https://test.com", name: "Ping"),
-        RequestInfo(method: .options, url: "https://test.com", name: "Options Users"),
+        RequestInfo(method: .options, url: "https://test.com", name: "Options Users")
+//        RequestInfo(method: .get, url: "https://test.com", name: "Get User"),
+//        RequestInfo(method: .post, url: "https://test.com", name: "Create Users"),
+//        RequestInfo(method: .put, url: "https://test.com", name: "Update User"),
+//        RequestInfo(method: .patch, url: "https://test.com", name: "Update User"),
+//        RequestInfo(method: .delete, url: "https://test.com", name: "Delete User"),
+//        RequestInfo(method: .head, url: "https://test.com", name: "Ping"),
+//        RequestInfo(method: .options, url: "https://test.com", name: "Options Users"),
     ]
+
+//    lazy var collection: CollectionInfo = .init(requests: $requests)
+//    lazy var collections: [CollectionInfo] = [collection]
+
+    let menuItems: [MenuItem] = [
+        MenuItem(name: "Computers", subMenuItems: [
+            MenuItem(name: "Desktops"),
+            MenuItem(name: "Laptops")
+        ]),
+        MenuItem(name: "Accessories", subMenuItems: [
+            MenuItem(name: "Keyboards"),
+            MenuItem(name: "Mice")
+        ])
+    ]
+
+//    lazy var collection: [CollectionInfo]
 
     var searchResults: [String] {
         if searchText.isEmpty {
             return items
         } else {
-            // Use localizedStandardContains for case-insensitive and accent-insensitive searches
+            // Use loc alizedStandardContains for case-insensitive and accent-insensitive searches
             return items.filter { $0.localizedStandardContains(searchText) }
         }
     }
 
-    @State private var visibility: NavigationSplitViewVisibility = .automatic
-
     var body: some View {
+//        var collection =
+
         NavigationSplitView(columnVisibility: $visibility) {
             List(selection: $selection) {
-                NavigationLink(destination: DetailView(item: 1)) {
+                NavigationLink(destination: CollectionList()) {
                     Label("Collections", systemImage: "rectangle.3.group")
                 }.tag(100)
-//                NavigationLink(destination: DetailView(item: 2)) {
-//                    Label("Environments", systemImage: "square")
-//                }.tag(200)
-                NavigationLink(destination: EnvironmentList(environments: $environments, environment: $environmentSelection)) {
+                NavigationLink(destination: EnvironmentList(environments: $environments, environment: $selectedEnvironment)) {
                     Label("Environments", systemImage: "square")
                 }.tag(200)
-//                NavigationLink(destination: DetailView(item: 2)) {
-                ////                    Label("Item 2", systemImage: "2.circle")
-//                    VStack(alignment: .leading) {
-//                        HStack {
-//                            Button("GET") {}.buttonStyle(.borderedProminent).tint(.green)
-//                            Text("New Request")
-//                        }
-                ////                        Text("https://").foregroundStyle(.secondary)
-//                    }
-//                }.tag(3)
-//                NavigationLink(destination: DetailView(item: 2)) {
-//                    VStack(alignment: .leading) {
-//                        HStack {
-//                            Button("POST") {}.buttonStyle(.borderedProminent).tint(.yellow)
-//                            Text("New Request")
-//                        }
-                ////                        Text("https://").foregroundStyle(.secondary)
-//                    }
-//                }.tag(4)
-//                NavigationLink(destination: DetailView(item: 2)) {
-//                    VStack(alignment: .leading) {
-//                        HStack {
-//                            Button("PUT") {}.buttonStyle(.borderedProminent).tint(.blue)
-//                            Text("New Request")
-//                        }
-                ////                        Text("https://").foregroundStyle(.secondary)
-//                    }
-//                }.tag(5)
-//                NavigationLink(destination: DetailView(item: 2)) {
-//                    VStack(alignment: .leading) {
-//                        HStack {
-//                            Button("PATCH") {}.buttonStyle(.borderedProminent).tint(.purple)
-//                            Text("New Request")
-//                        }
-                ////                        Text("https://").foregroundStyle(.secondary)
-//                    }
-//                }.tag(5)
-//                NavigationLink(destination: DetailView(item: 2)) {
-//                    VStack(alignment: .leading) {
-//                        HStack {
-//                            Button("DELETE") {}.buttonStyle(.borderedProminent).tint(.orange)
-//                            Text("New Request")
-//                        }
-                ////                        Text("https://").foregroundStyle(.secondary)
-//                    }
-//                }.tag(5)
-//                NavigationLink(destination: DetailView(item: 2)) {
-//                    VStack(alignment: .leading) {
-//                        HStack {
-//                            Button("HEAD") {}.buttonStyle(.borderedProminent).tint(.green)
-//                            Text("New Request")
-//                        }
-                ////                        Text("https://").foregroundStyle(.secondary)
-//                    }
-//                }.tag(5)
-//                NavigationLink(destination: DetailView(item: 2)) {
-//                    VStack(alignment: .leading) {
-//                        HStack {
-//                            Button("OPTIONS") {}.buttonStyle(.borderedProminent).tint(.pink)
-//                            Text("New Request")
-//                        }
-                ////                        Text("https://").foregroundStyle(.secondary)
-//                    }
-//                }.tag(7)
             }
             .listStyle(.sidebar)
             .navigationTitle("Menu")
@@ -205,14 +186,79 @@ struct ContentView: View {
 
         } content: {
             HStack {
-                Button(action: {}) {
-                    Text("New Collection")
+                Button(action: {
+                    showingCollectionAlert.toggle()
+                }) {
                     Label("Add", systemImage: "plus")
                         .labelStyle(.iconOnly).disabled(true)
-                }.padding(10)
-            }
-            .buttonStyle(PlainButtonStyle()) // Crucial for full custom control
+                }
+//
+                .alert("New Collection", isPresented: $showingCollectionAlert) {
+                    TextField("Collection Name", text: $collectionNameInput)
+                    Button("OK") {
+                        print("ok", collectionNameInput)
+                        collectionNameInput = ""
+                    }.disabled(collectionNameInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    Button("Cancel", role: .cancel) {
+                        print("cancel")
+                    }
+                }
+                message: {
+                    Text("Create new colection.")
+                }
+                Text("New Collection")
+            }.padding(.top, 10)
+//            .buttonStyle(PlainButtonStyle())
 //            NavigationStack {
+//            List {}
+//            ForEach(collections, id: \.id) { _ in
+//            //                VStack(alignment: .leading) {
+//            //                    HStack {
+//            //                        Button(request.method.rawValue.uppercased()) {}
+//            //                            .buttonStyle(.borderedProminent)
+//            //                            .tint(getMethodColor(request.method))
+//            //                        Text(request.name)
+//            //                    }
+//            //                }.tag(request.id)
+//            }
+//            Menu(/*@START_MENU_TOKEN@*/"Menu"/*@END_MENU_TOKEN@*/) {
+//                /*@START_MENU_TOKEN@*/Text("Menu Item 1")/*@END_MENU_TOKEN@*/
+//                /*@START_MENU_TOKEN@*/Text("Menu Item 2")/*@END_MENU_TOKEN@*/
+//                /*@START_MENU_TOKEN@*/Text("Menu Item 3")/*@END_MENU_TOKEN@*/
+//            }
+//            List {
+//                ForEach(menuItems) { _ in
+            ////                    Button(action: {
+            ////                        showingCollectionAlert.toggle()
+            ////                    }) {
+            ////                        Label("Collection 1", systemImage: "folder")
+            ////                    }
+            ////                    .buttonStyle(PlainButtonStyle())
+            ////                    .padding(.vertical, 4)
+//
+            ////                    Section(header: {
+            ////                        Text(item.name)
+            ////                    }) {
+            ////                        ForEach(["test1", "test2"], id: \.self) { sub in
+            ////                            Text(sub)
+//                    ////                            Text(sub)
+//                    ////                            PersonRowView(person: person)
+            ////                        }
+            ////                    }
+//                }
+//            }
+//            List(menuItems, children: \.subMenuItems) { item in
+//                // Customize the view for each item
+//                Text(item.name)
+//            }
+//            List {
+//                ForEach(menuItems) { item in
+//                    OutlineGroup(item, children: \.subMenuItems) { childItem in
+//                        // Customize the view for each child
+//                        Text(childItem.name)
+//                    }
+//                }
+//            }
             List(selection: $requestSelection) {
                 ForEach(Array(requests.enumerated()), id: \.offset) { _, request in
                     VStack(alignment: .leading) {
@@ -224,63 +270,18 @@ struct ContentView: View {
                         }
                     }.tag(request.id)
                 }
-//                ForEach(data: requests) { request in
-                ////                    VStack(alignment: .leading) {
-                ////                        HStack {
-                ////                            Button(request.method) {}.buttonStyle(.borderedProminent).tint(.green)
-                ////                            Text("New Request")
-                ////                        }
-                ////                        //                        Text("https://").foregroundStyle(.secondary)
-                ////                    }.tag(3)
-                ////                    /*@START_MENU_TOKEN@*/Text(data.method)/*@END_MENU_TOKEN@*/
+//                Text("Collection 2")
+//                ForEach(Array(requests.enumerated()), id: \.offset) { _, request in
+//                    VStack(alignment: .leading) {
+//                        HStack {
+//                            Button(request.method.rawValue.uppercased()) {}
+//                                .buttonStyle(.borderedProminent)
+//                                .tint(getMethodColor(request.method))
+//                            Text(request.name)
+//                        }
+//                    }.tag(request.id)
 //                }
-//                VStack(alignment: .leading) {}
-//                VStack(alignment: .leading) {
-//                    HStack {
-//                        Button("GET") {}.buttonStyle(.borderedProminent).tint(.green)
-//                        Text("New Request")
-//                    }
-                ////                        Text("https://").foregroundStyle(.secondary)
-//                }.tag(3)
-//                VStack(alignment: .leading) {
-//                    HStack {
-//                        Button("POST") {}.buttonStyle(.borderedProminent).tint(.yellow)
-//                        Text("New Request")
-//                    }
-                ////                        Text("https://").foregroundStyle(.secondary)
-//                }.tag(4)
-//                VStack(alignment: .leading) {
-//                    HStack {
-//                        Button("PUT") {}.buttonStyle(.borderedProminent).tint(.blue)
-//                        Text("New Request")
-//                    }
-//                }.tag(4)
-//                VStack(alignment: .leading) {
-//                    HStack {
-//                        Button("PATCH") {}.buttonStyle(.borderedProminent).tint(.purple)
-//                        Text("New Request")
-//                    }
-//                }.tag(5)
-//                VStack(alignment: .leading) {
-//                    HStack {
-//                        Button("DELETE") {}.buttonStyle(.borderedProminent).tint(.orange)
-//                        Text("New Request")
-//                    }
-//                }.tag(6)
-//                VStack(alignment: .leading) {
-//                    HStack {
-//                        Button("HEAD") {}.buttonStyle(.borderedProminent).tint(.green)
-//                        Text("New Request")
-//                    }
-//                }.tag(6)
-//                VStack(alignment: .leading) {
-//                    HStack {
-//                        Button("OPTIONS") {}.buttonStyle(.borderedProminent).tint(.pink)
-//                        Text("New Request")
-//                    }
-//                }.tag(7)
-            }
-//            }
+            } // .border(Color.blue)
 //            NavigationStack { // Required for the searchable modifier to work
 //                List {
 //                    ForEach(searchResults, id: \.self) { item in
@@ -301,7 +302,7 @@ struct ContentView: View {
         }
         .toolbar {
             ToolbarItem {
-                Picker(environmentSelection, selection: $environmentSelection) {
+                Picker(selectedEnvironment, selection: $selectedEnvironment) {
                     ForEach(environments, id: \.self) { env in
                         Text(env)
                     }
@@ -309,15 +310,25 @@ struct ContentView: View {
                 .labelsHidden()
                 .scaledToFit()
             }
-            ToolbarItem {
-                Button(action: sendHttpRequest) {
-                    Label("Save", systemImage: "play.fill")
-                }.disabled(true)
-            }
+//            ToolbarItem {
+//                Button(action: sendHttpRequest) {
+//                    Label("Save", systemImage: "play.fill")
+//                }.disabled(true)
+//            }
         }.navigationSplitViewStyle(.prominentDetail)
 //        .searchable(text: $searchText, placement: .automatic)
     }
 }
+
+// MARK: Collection
+
+struct CollectionList: View {
+    var body: some View {
+        Text("Test")
+    }
+}
+
+// MARK: something
 
 struct DetailView: View {
     var item: Int
@@ -328,9 +339,11 @@ struct DetailView: View {
     }
 }
 
-struct EnvironmentInfo {
-    @State var name: String = "New Environment"
-}
+// MARK: Environment
+
+// struct EnvironmentInfo {
+//    @State var name: String = "New Environment"
+// }
 
 struct EnvironmentView {
     var body: some View {
@@ -342,28 +355,66 @@ struct EnvironmentList: View {
     @Binding var environments: [String]
     @Binding var environment: String
 
+    @State var selectedEnvironment: String?
+    @State private var isHovered = false
+    @State private var hoveredEnvironment: String?
+
+    @State var envNameInput: String = ""
+    @State var showingAlert: Bool = false
+
     var body: some View {
         NavigationStack {
 //        Text(environment).navigationTitle("env: \(environment)")
             HStack {
-                Text("New Environment")
-                Button(action: {}) {
+//
+                Button(action: {
+                    showingAlert.toggle()
+                }) {
                     Label("add-environment", systemImage: "plus")
-                        .labelStyle(.iconOnly).disabled(true)
-                }.padding(10)
+                        .labelStyle(.iconOnly)
+                }
+                .alert("New Environment", isPresented: $showingAlert) {
+                    TextField("Environment Name", text: $envNameInput)
+                    Button("OK") {
+                        environments.append(envNameInput)
+                        // reset input
+                        envNameInput = ""
+                    }.disabled(envNameInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    Button("Cancel", role: .cancel) {
+                        // reset input
+                        envNameInput = ""
+                    }
+                }
+                message: {
+                    Text("Create new colection.")
+                }
+                Text("New Environment")
             }
-            .buttonStyle(PlainButtonStyle())
+            .padding(.top, 10)
+//            .buttonStyle(PlainButtonStyle())
             VStack {
-                List(selection: $environment) {
+                List(selection: $selectedEnvironment) {
                     ForEach(environments, id: \.self) { env in
                         HStack {
-                            Text(env).tag(env)
+                            Text(env)
+                            Spacer()
                             if env == environment {
-                                Spacer()
                                 Image(systemName: "checkmark.circle.fill")
+                            } else if hoveredEnvironment == env {
+                                Image(systemName: "checkmark.circle")
                             }
-//
                         }
+                        .contentShape(.rect)
+                        .tag(env)
+                        .onHover { hover in
+                            if hover {
+                                self.hoveredEnvironment = env
+                            } else {
+                                self.hoveredEnvironment = nil
+                            }
+                        }
+//                        .border(Color.red)
+//                        .onTapGesture(count: 2) {}
                     }
 //
 //
