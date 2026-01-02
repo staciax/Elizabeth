@@ -9,8 +9,8 @@ import SwiftUI
 
 @Observable class AppState {
     // environments
-    var selectedEnvironment: String = "Globals"
-    var environments: [String] = ["Globals"]
+    var selectedEnvironment: String = "No Environment"
+    var environments: [String] = ["No Environment"]
 
 //    var selectionEnvironment: EnvironmentInfo?
     var selectedCollection: CollectionInfo?

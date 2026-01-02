@@ -51,12 +51,18 @@ struct EnvironmentView2: View {
                     ForEach(appState.environments, id: \.self) { env in
                         NavigationLink(value: env) {
                             HStack {
-                                Text(env)
-                                Spacer()
-                                if env == appState.selectedEnvironment {
-                                    Image(systemName: "checkmark.circle.fill")
-                                } else if hoveredEnvironment == env {
-                                    Image(systemName: "checkmark.circle")
+                                let isGlobal = env == "No Environment"
+                                if isGlobal {
+                                    Text("Globals")
+                                    Spacer()
+                                } else {
+                                    Text(env)
+                                    Spacer()
+                                    if env == appState.selectedEnvironment {
+                                        Image(systemName: "checkmark.circle.fill")
+                                    } else if hoveredEnvironment == env {
+                                        Image(systemName: "checkmark.circle")
+                                    }
                                 }
                             }
                             .contentShape(.rect)
