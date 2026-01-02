@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-struct EnvironmentInfo {
-    @State var appState = AppState()
-
-//    @State var name: String = "New Environment"
-}
-
 struct EnvironmentView2: View {
     @Bindable var appState: AppState
 
@@ -81,16 +75,15 @@ struct EnvironmentView2: View {
     }
 }
 
+// ​ TODO: use dictionary instead of struct
 private struct EnvironmentVariable: Identifiable {
     let id: UUID = .init()
-
     var name: String
     var value: String
+//    var isEnabled: Bool
 }
 
 struct EnvironmentDetailView2: View {
-//    let id = UUID()
-
     @State var appState = AppState()
 
     // state
@@ -104,12 +97,25 @@ struct EnvironmentDetailView2: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(appState.selectedEnvironment)
                 .padding(4)
+//            TextField(text: $appState.selectedEnvironment, label: {})
+//                .textFieldStyle(.plain)
+//                .padding(4)
             Table(of: Binding<EnvironmentVariable>.self, selection: $selections, columns: {
+//                TableColumn("") { variable in
+//                    Toggle("", isOn: variable.isEnabled)
+//                        .labelsHidden()
+//                }.width(24)
                 TableColumn("Variable") { variable in
                     TextField(text: variable.name, label: {})
+                        .frame(maxWidth: .infinity)
+                        .textFieldStyle(.plain)
+                        .padding(.vertical, 4)
                 }
                 TableColumn("Value") { variable in
                     TextField(text: variable.value, label: {})
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .textFieldStyle(.plain)
+                        .padding(.vertical, 4)
                 }
             }, rows: {
                 ForEach($variables) { variable in
@@ -117,11 +123,14 @@ struct EnvironmentDetailView2: View {
                 }
             })
         }
+        .padding(.horizontal, 16)
+        .padding(.top, 16)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
 #Preview {
     let appState = AppState()
     EnvironmentView2(appState: appState)
-//    EnvironmentDetailView2()
+    EnvironmentDetailView2()
 }
