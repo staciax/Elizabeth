@@ -86,6 +86,10 @@ let sampleData: [RequestItem] = [
     ),
     RequestItem(
         id: UUID(),
+        name: "Empty folder"
+    ),
+    RequestItem(
+        id: UUID(),
         name: "test",
         data: RequestData(method: .get, url: "https://httpbin.org/get")
     )
@@ -105,7 +109,7 @@ struct CollectionView: View {
         VStack {
             List(items, children: \.children, selection: $listSelection) { item in
                 HStack {
-                    let isFolder = item.children != nil
+                    let isFolder = (item.children != nil || item.data == nil)
                     if isFolder {
                         Image(systemName: "folder").foregroundColor(.gray)
                     } else if let data = item.data {
