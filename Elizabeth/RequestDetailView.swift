@@ -17,6 +17,13 @@ struct Param: Identifiable {
     var value: String
     var id: String { key }
 }
+
+struct Header: Identifiable {
+    var key: String
+    var value: String
+    var id: String { key }
+}
+
 struct RequestDetailView: View {
     @Binding var request: RequestItem
 
