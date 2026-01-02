@@ -12,6 +12,68 @@ enum PanePanel: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
+// struct LineNumberCodeView: View {
+//    let content: String
+//
+//    var body: some View {
+//        // Use a Read-Only TextEditor for native selection/copy/paste
+//        TextEditor(text: .constant(content))
+//            .font(.system(size: 13, design: .monospaced))
+//            .scrollContentBackground(.hidden) // Required for custom background
+//            .background(Color(white: 0.11))
+//            .foregroundColor(Color(white: 0.9))
+//            .padding(8)
+//    }
+// }
+
+struct LineNumberCodeView: View {
+    let content: String
+    let fontSize: CGFloat = 13
+
+    private var lines: [String] {
+        content.components(separatedBy: .newlines)
+    }
+
+    private let backgroundColor = Color(white: 0.11)
+    private let codeTextColor = Color(white: 0.9)
+    private let dividerColor = Color(white: 0.25)
+
+    var body: some View {
+        ScrollView(.vertical, showsIndicators: true) {
+            LazyVStack(alignment: .leading, spacing: 0) {
+                ForEach(Array(lines.enumerated()), id: \.offset) { index, line in
+                    HStack(alignment: .top, spacing: 0) {
+                        // line number
+                        Text("\(index + 1)")
+                            .font(.system(size: fontSize, design: .monospaced))
+                            .foregroundColor(codeTextColor)
+                            .frame(width: 44, alignment: .trailing)
+                            .padding(.trailing, 8)
+                            .padding(.leading, 8)
+                            .padding(.vertical, 3)
+
+                        // divider
+                        Rectangle()
+                            .fill(dividerColor)
+                            .frame(width: 1)
+
+                        // code line
+                        Text(line.isEmpty ? " " : line)
+                            .font(.system(size: fontSize, design: .monospaced))
+                            .foregroundColor(codeTextColor)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 3)
+                            .textSelection(.enabled)
+                    }
+                    .background(backgroundColor)
+                }
+            }
+        }
+        .background(backgroundColor)
+    }
+}
+
 enum RequestDetailPanel: String, CaseIterable, Identifiable {
     case request, response
     var id: Self { self }
