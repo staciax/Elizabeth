@@ -5,7 +5,80 @@
 //  Created by STACiA on 31/12/2568 BE.
 //
 
+import Alamofire
 import SwiftUI
+
+typealias HTTPRequestResult = (
+    data: String?,
+    statusCode: Int?,
+    url: URL?,
+    duration: TimeInterval,
+    requestHeaders: [String: String],
+    responseHeaders: [String: String],
+    cookies: [String],
+    errorDescription: String?
+)
+
+func sendHttpRequest(_ request: RequestData) async -> HTTPRequestResult {
+    let headers: HTTPHeaders = [
+        "Accept": "application/json"
+    ]
+
+    let startTime = CFAbsoluteTimeGetCurrent()
+
+    let task = AF.request(
+        request.url,
+        method: .init(rawValue: request.method.rawValue.uppercased()),
+        headers: headers
+    )
+    .serializingString() // .serializingData()
+
+    let endTime = CFAbsoluteTimeGetCurrent()
+    let duration = endTime - startTime
+
+    let response = await task.response
+
+    print("Status:", response.response?.statusCode as Any)
+    print("Body:", response.value ?? "no body")
+    print(type(of: response))
+    print(type(of: response.value))
+
+    let httpResponse = response.response
+
+    let data = response.value
+    let statusCode = httpResponse?.statusCode
+    let finalURL = httpResponse?.url
+
+    // response headers
+    var responseHeaders: [String: String] = [:]
+    if let all = httpResponse?.allHeaderFields {
+        for (k, v) in all {
+            responseHeaders[String(describing: k)] = String(describing: v)
+        }
+    }
+
+    // request headers
+    let requestHeaders = response.request?.allHTTPHeaderFields ?? [:]
+
+    // cookie
+    let cookies: [String] = responseHeaders
+        .filter { $0.key.lowercased() == "set-cookie" }
+        .map { $0.value }
+
+    // error
+    let errorDescription = response.error?.localizedDescription
+
+    return (
+        statusCode: statusCode,
+        url: finalURL,
+        duration: duration,
+        requestHeaders: requestHeaders,
+        responseHeaders: responseHeaders,
+        data: data,
+        cookies: cookies,
+        errorDescription: errorDescription
+    )
+}
 
 @Observable class AppState {
     // environments
@@ -77,18 +150,37 @@ struct SidebarView: View {
             .listStyle(.sidebar)
             .navigationTitle("Menu")
         } content: {
-            switch selectedSideBar {
-            case .collections:
+//            switch selectedSideBar {
+//            case .collections:
+//                CollectionView(appState: appState, selectionRequest: $selectionRequest)
+//            case .environments:
+//                EnvironmentView2(appState: appState)
+//            }
+            ZStack {
                 CollectionView(appState: appState, selectionRequest: $selectionRequest)
-            case .environments:
+                    .opacity(selectedSideBar == .collections ? 1 : 0)
+
                 EnvironmentView2(appState: appState)
+                    .opacity(selectedSideBar == .environments ? 1 : 0)
             }
-//            EmptyView()
-//            ContentUnavailableView("test", image: "plus")
         } detail: {
+            // TODO: use ZStack for persistant view
             switch selectedSideBar {
             case .collections:
                 if let selectedRequest = selectionRequest {
+//                    ScrollView(.horizontal, showsIndicators: false) {
+//                        LazyHStack(alignment: .center) {
+//                            ForEach(1 ... 5, id: \.self) { _ in
+//                                Group {
+//                                    Button {} label: {
+//                                        Text("GET").foregroundColor(getMethodColor(.get)).bold()
+//                                        Text("New Request")
+//                                    }.buttonStyle(.bordered)
+//                                }
+//                            }
+//                        }
+//                    }.scaledToFit()
+//                    Divider()
                     if selectedRequest.data != nil {
                         RequestDetailView(request: Binding(
                             get: { selectedRequest },
@@ -112,21 +204,8 @@ struct SidebarView: View {
                         description: Text("Select a request to view details")
                     )
                 }
-//                if let request = Binding($selectionRequest) {
-//                    RequestDetailView(request: request)
-//                } else {
-//                    VStack(alignment: .center) {
-//                        HStack(alignment: .center) {
-//                            VStack {
-//                                Button("Create a new request") {}
-//                            }
-//                        }
-//                    }
-            ////                    ContentUnavailableView("No request selected", systemImage: "xmark")
-//                    // TODO: create new request
-//                }
             case .environments:
-                Text("Environments \(appState.selectedEnvironment)")
+                EnvironmentDetailView2()
             }
         }.toolbar {
             ToolbarItem {
@@ -151,8 +230,15 @@ struct SidebarView: View {
             // TODO: if selected request show this button
 //            if selectedSideBar == .collections {
             ToolbarItem {
-                Button(action: sendHttpRequest) {
-                    Label("Save", systemImage: "play.fill")
+                Button(action: {
+                    Task {
+                        if let requestData = selectionRequest?.data {
+                            let response = await sendHttpRequest(requestData)
+//                            requestData.re
+                        }
+                    }
+                }) {
+                    Label("Send", systemImage: "play.fill")
                 }
                 .disabled(
                     selectedSideBar != .collections || selectionRequest?.data == nil
