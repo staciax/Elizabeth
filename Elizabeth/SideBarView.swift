@@ -105,12 +105,6 @@ struct SidebarView: View {
     var body: some View {
         NavigationSplitView(columnVisibility: $visibility) {
             List(selection: $selectedSideBar) {
-//                NavigationLink(destination: CollectionList()) {
-//                    Label("Collections", systemImage: "rectangle.3.group")
-//                }.tag(SideBarItem.collections)
-//                NavigationLink(destination: EnvironmentView2()) {
-//                    Label("Environments", systemImage: "square")
-//                }.tag(SideBarItem.environments)
                 NavigationLink(value: SideBarItem.collections) {
                     Label("Collections", systemImage: "rectangle.3.group")
                 }
