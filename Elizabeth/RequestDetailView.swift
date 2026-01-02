@@ -12,6 +12,22 @@ enum PanePanel: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
+enum RequestDetailPanel: String, CaseIterable, Identifiable {
+    case request, response
+    var id: Self { self }
+}
+
+enum AuthType: String, CaseIterable, Identifiable {
+    case none = "None", basic = "Basic", oauth = "OAuth"
+    var id: Self { self }
+}
+
+enum BodyType: String, CaseIterable, Identifiable {
+    case formData = "FormData"
+    case raw = "Raw"
+    var id: Self { self }
+}
+
 struct Param: Identifiable {
     var key: String
     var value: String
