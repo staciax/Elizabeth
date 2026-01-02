@@ -77,7 +77,9 @@ func getMethodColor(_ httpMethod: HTTPMethod) -> Color {
 }
 
 struct ContentView: View {
-    var body: some View {}
+    var body: some View {
+        SidebarView()
+    }
 }
 
 #Preview {
