@@ -43,12 +43,6 @@ struct Person: Identifiable {
     var fullName: String { givenName + " " + familyName }
 }
 
-struct Param: Identifiable {
-    let id = UUID()
-    let key: String
-    let value: String
-}
-
 struct Home: View {
     @State private var name: String = ""
     @State private var url: String = ""
@@ -85,6 +79,7 @@ struct Home: View {
         Param(key: "test key 3", value: "test value"),
         Param(key: "test key 3", value: "test value"),
     ]
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {

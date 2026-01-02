@@ -12,6 +12,11 @@ enum PanePanel: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
+struct Param: Identifiable {
+    var key: String
+    var value: String
+    var id: String { key }
+}
 struct RequestDetailView: View {
     @Binding var request: RequestItem
 
