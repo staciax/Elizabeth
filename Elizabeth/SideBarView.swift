@@ -171,7 +171,7 @@ struct SidebarView: View {
                     )
                 }
             case .environments:
-                EnvironmentDetailView2()
+                EnvironmentDetailView()
             }
         }.toolbar {
             ToolbarItem {
