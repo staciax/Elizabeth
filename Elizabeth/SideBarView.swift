@@ -99,6 +99,7 @@ struct SidebarView: View {
 
     @State var selectedSideBar: SideBarItem = .collections
     @State var selectionRequest: RequestItem?
+    @State var httpResponse: HTTPRequestResult?
 
     @State var visibility: NavigationSplitViewVisibility = .automatic
 
@@ -148,10 +149,13 @@ struct SidebarView: View {
 //                    }.scaledToFit()
 //                    Divider()
                     if selectedRequest.data != nil {
-                        RequestDetailView(request: Binding(
-                            get: { selectedRequest },
-                            set: { selectionRequest = $0 }
-                        ))
+                        RequestDetailView(
+                            request: Binding(
+                                get: { selectedRequest },
+                                set: { selectionRequest = $0 }
+                            ),
+                            response: $httpResponse
+                        )
                     } else {
                         VStack(alignment: .leading) {
                             Text("Overview").font(.title).bold()
@@ -199,8 +203,7 @@ struct SidebarView: View {
                 Button(action: {
                     Task {
                         if let requestData = selectionRequest?.data {
-                            let response = await sendHttpRequest(requestData)
-//                            requestData.re
+                            httpResponse = await sendHttpRequest(requestData)
                         }
                     }
                 }) {
