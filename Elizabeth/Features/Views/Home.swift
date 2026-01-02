@@ -9,11 +9,6 @@
 import Foundation
 import SwiftUI
 
-enum HTTPMethod: String, CaseIterable, Identifiable {
-    case get, post, put, patch, delete, head, options
-    var id: Self { self }
-}
-
 enum Flavor: String, CaseIterable, Identifiable {
     case chocolate, vanilla, strawberry
     var id: Self { self }
