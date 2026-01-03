@@ -13,6 +13,7 @@ struct ElizabethApp: App {
 
     init() {
         // init data
+        appState.environments.append(contentsOf: ["Local", "Production"])
         appState.environments2.append((name: "Globals", variables: [:]))
     }
 
