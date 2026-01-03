@@ -136,12 +136,12 @@ struct SidebarView: View {
             switch selectedSideBar {
             case .collections:
                 if let selectedRequest = selectionRequest {
-                        RequestDetailView(
-                            request: Binding(
-                                get: { selectedRequest },
-                                set: { selectionRequest = $0 }
+                    RequestDetailView(
+                        request: Binding(
+                            get: { selectedRequest },
+                            set: { selectionRequest = $0 }
                         )
-                        )
+                    )
                 } else {
                     ContentUnavailableView(
                         "No Request Selected",
@@ -154,39 +154,13 @@ struct SidebarView: View {
             }
         }.toolbar {
             ToolbarItem {
-                Picker(appState.selectedEnvironment, selection: $appState.selectedEnvironment) {
+                Picker("", selection: $appState.selectedEnvironment) {
                     ForEach(appState.environments, id: \.self) { env in
                         Text(env)
                     }
                 }
                 .labelsHidden()
                 .fixedSize()
-            }
-//            ToolbarItem {
-//                Picker(selectedEnvironment, selection: $selectedEnvironment) {
-//                    ForEach(environments, id: \.self) { env in
-//                        Text(env)
-//                    }
-//                }
-//                .labelsHidden()
-//                .scaledToFit()
-//            }
-
-            // TODO: if selected request show this button
-//            if selectedSideBar == .collections {
-            ToolbarItem {
-                Button(action: {
-                    Task {
-                        if let requestData = selectionRequest?.data {
-                            httpResponse = await sendHttpRequest(requestData)
-                        }
-                    }
-                }) {
-                    Label("Send", systemImage: "play.fill")
-                }
-                .disabled(
-                    selectedSideBar != .collections || selectionRequest?.data == nil
-                )
             }
         }
 //        .navigationSplitViewStyle(.prominentDetail)
