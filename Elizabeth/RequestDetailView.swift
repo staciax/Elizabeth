@@ -52,6 +52,23 @@ struct Header: Identifiable {
     var id: String { key }
 }
 
+func statusColor(for statusCode: Int) -> Color {
+    switch statusCode {
+    case 100..<200:
+        return .gray
+    case 200..<300:
+        return .green
+    case 300..<400:
+        return .blue
+    case 400..<500:
+        return .orange
+    case 500..<600:
+        return .red
+    default:
+        return .gray
+    }
+}
+
 struct RequestDetailView: View {
     @Binding var request: RequestItem
 
@@ -254,9 +271,9 @@ struct RequestDetailView: View {
                             let statusCode = response?.statusCode ?? 200
                             let duration = response?.duration ?? 0.0
                             let fmtDuration = formatDuration(duration)
-//
                             // TODO: add content-length
-                            Text("\(statusCode)")
+
+                            Text("\(statusCode)").foregroundStyle(statusColor(for: statusCode))
                             Text(" | ")
                             Text("\(fmtDuration)")
                         }
