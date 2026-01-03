@@ -12,66 +12,66 @@ enum PanePanel: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
-// struct CodeViewWithLineNumber: View {
-//    let content: String
-//
-//    var body: some View {
-//        TextEditor(text: .constant(content))
-//            .font(.system(size: 13, design: .monospaced))
-//            .scrollContentBackground(.hidden) // Required for custom background
-//            .background(Color(white: 0.11))
-//            .foregroundColor(Color(white: 0.9))
-//            .padding(8)
-//    }
-// }
-
-struct CodeViewWithLineNumber: View {
+struct TextEditingView: View {
     let content: String
-    let fontSize: CGFloat = 13
-
-    private var lines: [String] {
-        content.components(separatedBy: .newlines)
-    }
-
-    private let backgroundColor = Color(white: 0.11)
-    private let codeTextColor = Color(white: 0.9)
-    private let dividerColor = Color(white: 0.25)
 
     var body: some View {
-        ScrollView(.vertical, showsIndicators: true) {
-            LazyVStack(alignment: .leading, spacing: 0) {
-                ForEach(Array(lines.enumerated()), id: \.offset) { index, line in
-                    HStack(alignment: .top, spacing: 0) {
-                        // line number
-                        Text("\(index + 1)")
-                            .font(.system(size: fontSize, design: .monospaced))
-                            .foregroundColor(codeTextColor)
-                            .frame(width: 44, alignment: .trailing)
-                            .padding(.trailing, 8)
-                            .padding(.leading, 8)
-                            .padding(.vertical, 3)
-
-                        // divider
-                        Rectangle()
-                            .fill(dividerColor)
-                            .frame(width: 1)
-
-                        // code line
-                        Text(line.isEmpty ? " " : line)
-                            .font(.system(size: fontSize, design: .monospaced))
-                            .foregroundColor(codeTextColor)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 3)
-                            .textSelection(.enabled)
-                    }
-                    .background(backgroundColor)
-                }
-            }
-        }
-        .background(backgroundColor)
+        TextEditor(text: .constant(content))
+            .font(.system(size: 13, design: .monospaced))
+            .scrollContentBackground(.hidden)
+            .background(Color(white: 0.11))
+            .foregroundColor(Color(white: 0.9))
     }
 }
+
+//
+// struct CodeViewWithLineNumber: View {
+//    let content: String
+//    let fontSize: CGFloat = 13
+//
+//    private var lines: [String] {
+//        content.components(separatedBy: .newlines)
+//    }
+//
+//    private let backgroundColor = Color(white: 0.11)
+//    private let codeTextColor = Color(white: 0.9)
+//    private let dividerColor = Color(white: 0.25)
+//
+//    var body: some View {
+//        ScrollView(.vertical, showsIndicators: true) {
+//            LazyVStack(alignment: .leading, spacing: 0) {
+//                ForEach(Array(lines.enumerated()), id: \.offset) { index, line in
+//                    HStack(alignment: .top, spacing: 0) {
+//                        // line number
+//                        Text("\(index + 1)")
+//                            .font(.system(size: fontSize, design: .monospaced))
+//                            .foregroundColor(codeTextColor)
+//                            .frame(width: 44, alignment: .trailing)
+//                            .padding(.trailing, 8)
+//                            .padding(.leading, 8)
+//                            .padding(.vertical, 3)
+//
+//                        // divider
+//                        Rectangle()
+//                            .fill(dividerColor)
+//                            .frame(width: 1)
+//
+//                        // code line
+//                        Text(line.isEmpty ? " " : line)
+//                            .font(.system(size: fontSize, design: .monospaced))
+//                            .foregroundColor(codeTextColor)
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                            .padding(.horizontal, 12)
+//                            .padding(.vertical, 3)
+//                            .textSelection(.enabled)
+//                    }
+//                    .background(backgroundColor)
+//                }
+//            }
+//        }
+//        .background(backgroundColor)
+//    }
+// }
 
 enum RequestDetailPanel: String, CaseIterable, Identifiable {
     case request, response
@@ -299,11 +299,20 @@ struct RequestDetailView: View {
                     }
                 } else {
                     if response != nil {
-                        VStack {
-                            CodeViewWithLineNumber(content: response?.data ?? "")
-                                .padding(.vertical, 4)
-                            Spacer()
+                        Button(action: {}) {
+                            let statusCode = response?.statusCode ?? 200
+                            let duration = response?.duration ?? 0.0
+                            let fmtDuration = formatDuration(duration)
+//
+                            // TODO: add content-length
+                            Text("\(statusCode)")
+                            Text(" | ")
+                            Text("\(fmtDuration)")
                         }
+
+                        TextEditingView(content: response?.data ?? "")
+                            .padding(.vertical, 4)
+                        Spacer()
                     }
                 }
 
@@ -348,6 +357,25 @@ struct RequestDetailView: View {
         .padding()
     }
 
+    func formatDuration(_ seconds: Double) -> String {
+        let seconds = max(seconds, 0)
+
+        if seconds == 0 { return "0 ms" }
+
+        if seconds < 1 {
+            let ms = seconds * 1000
+            return String(format: "%.1f ms", ms)
+        } else if seconds < 60 {
+            return String(format: "%.2f s", seconds)
+        } else if seconds < 3600 {
+            let minutes = seconds / 60
+            return String(format: "%.2f m", minutes)
+        } else {
+            let hours = seconds / 3600
+            return String(format: "%.2f h", hours)
+        }
+    }
+
     func makeMethodBinding() -> Binding<HTTPMethod> {
         return Binding(
             get: { request.data?.method ?? .get },
@@ -376,7 +404,7 @@ struct RequestDetailView: View {
         id: UUID(),
         name: "Test name",
         description: "Test Description",
-        data: RequestData(method: .delete, url: "https://httpbin.org/get")
+        data: RequestData(method: .delete, url: "https://httpbin.org/delete")
     )
     RequestDetailView(request: $request)
 }
