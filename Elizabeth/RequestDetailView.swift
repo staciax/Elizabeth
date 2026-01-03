@@ -50,8 +50,8 @@ func sendHttpRequest(_ request: RequestData) async -> HTTPRequestResult {
     // response headers
     var responseHeaders: [String: String] = [:]
     if let all = httpResponse?.allHeaderFields {
-        for (k, v) in all {
-            responseHeaders[String(describing: k)] = String(describing: v)
+        for (key, value) in all {
+            responseHeaders[String(describing: key)] = String(describing: value)
         }
     }
 
