@@ -134,37 +134,12 @@ struct SidebarView: View {
             switch selectedSideBar {
             case .collections:
                 if let selectedRequest = selectionRequest {
-//                    ScrollView(.horizontal, showsIndicators: false) {
-//                        LazyHStack(alignment: .center) {
-//                            ForEach(1 ... 5, id: \.self) { _ in
-//                                Group {
-//                                    Button {} label: {
-//                                        Text("GET").foregroundColor(getMethodColor(.get)).bold()
-//                                        Text("New Request")
-//                                    }.buttonStyle(.bordered)
-//                                }
-//                            }
-//                        }
-//                    }.scaledToFit()
-//                    Divider()
-                    if selectedRequest.data != nil {
                         RequestDetailView(
                             request: Binding(
                                 get: { selectedRequest },
                                 set: { selectionRequest = $0 }
                         )
                         )
-                    } else {
-                        VStack(alignment: .leading) {
-                            Text("Overview").font(.title).bold()
-                            HStack(alignment: .top) {
-                                Text(selectedRequest.description ?? "")
-                                Spacer()
-                            }
-                            Spacer()
-                        }.padding()
-                    }
-
                 } else {
                     ContentUnavailableView(
                         "No Request Selected",
