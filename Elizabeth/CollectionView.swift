@@ -117,7 +117,7 @@ struct CollectionView: View {
                         let method = $item.data.wrappedValue?.method ?? HTTPMethod.get
                         Text(method.rawValue.uppercased())
                             .bold()
-                            .foregroundColor(getMethodColor(method))
+                            .foregroundColor(getMethodColor(for: method))
                     }
                     Text($item.wrappedValue.name).font(!isFolder ? .body : .headline)
                     Spacer()
