@@ -158,7 +158,7 @@ struct SidebarView: View {
                     }
                 }
                 .labelsHidden()
-                .scaledToFit()
+                .fixedSize()
             }
 //            ToolbarItem {
 //                Picker(selectedEnvironment, selection: $selectedEnvironment) {
