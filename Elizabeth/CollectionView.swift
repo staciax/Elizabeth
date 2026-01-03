@@ -86,7 +86,7 @@ let sampleData: [RequestItem] = [
     ),
     RequestItem(
         id: UUID(),
-        name: "Empty folder"
+        name: "Empty Collection"
     ),
     RequestItem(
         id: UUID(),
@@ -114,24 +114,24 @@ func addRequest(to item: inout RequestItem) -> RequestItem {
     return newRequest
 }
 
-func addFolder(to item: inout RequestItem) -> RequestItem {
-    let newFolder = RequestItem(
+func addCollection(to item: inout RequestItem) -> RequestItem {
+    let newCollection = RequestItem(
         id: UUID(),
-        name: "New Folder"
+        name: "New Collection"
     )
 
     if item.children == nil {
         item.children = []
     }
 
-    item.children?.append(newFolder)
-    return newFolder
+    item.children?.append(newCollection)
+    return newCollection
 }
 
 struct CollectionView: View {
     @Environment(AppState.self) private var appState
 
-    @Binding var selectionRequest: RequestItem?
+    @Binding var selection: RequestItem?
 
     @State var items: [RequestItem] = sampleData
 
@@ -139,11 +139,27 @@ struct CollectionView: View {
 
     var body: some View {
         VStack {
-            List($items, children: \.children, selection: $selectionRequest) { $item in
-                HStack {
-                    let isFolder = ($item.wrappedValue.children != nil || $item.wrappedValue.data == nil)
+            HStack {
+                Button(action: {
+                    let newCollection = RequestItem(
+                        id: UUID(),
+                        name: "New Collection"
+                    )
+                    items.append(newCollection)
+                    selection = newCollection
+                }) {
+                    Label("", systemImage: "plus")
+                        .labelStyle(.iconOnly)
+                }
+                Text("New Collection")
+            }
+            .padding(.top, 10)
 
-                    if isFolder {
+            List($items, children: \.children, selection: $selection) { $item in
+                HStack {
+                    let isCollection = ($item.wrappedValue.children != nil || $item.wrappedValue.data == nil)
+
+                    if isCollection {
                         Image(systemName: "folder").foregroundColor(.gray)
                     } else {
                         let method = $item.data.wrappedValue?.method ?? HTTPMethod.get
@@ -151,14 +167,14 @@ struct CollectionView: View {
                             .bold()
                             .foregroundColor(getMethodColor(for: method))
                     }
-                    Text($item.wrappedValue.name).font(!isFolder ? .body : .headline)
+                    Text($item.wrappedValue.name).font(!isCollection ? .body : .headline)
                     Spacer()
 
                     Group {
-                        if isFolder {
+                        if isCollection {
                             Button(action: {
                                 let newRequest = addRequest(to: &item)
-                                selectionRequest = newRequest
+                                selection = newRequest
                                 hoveredItem = item
                             }) {
                                 Label("", systemImage: "plus").labelStyle(.iconOnly)
@@ -169,13 +185,13 @@ struct CollectionView: View {
                             Menu {
                                 Button("Add Request") {
                                     let newRequest = addRequest(to: &item)
-                                    selectionRequest = newRequest
+                                    selection = newRequest
                                     hoveredItem = item
                                 }
 
-                                Button("Add Folder") {
-                                    let newFolder = addFolder(to: &item)
-                                    selectionRequest = newFolder
+                                Button("Add Collection") {
+                                    let newCollection = addCollection(to: &item)
+                                    selection = newCollection
                                     hoveredItem = item
                                 }
 
@@ -240,5 +256,5 @@ struct CollectionView: View {
 #Preview {
     @Previewable @State var selectionRequest: RequestItem?
     @Previewable @State var appState = AppState()
-    CollectionView(selectionRequest: $selectionRequest).environment(appState)
+    CollectionView(selection: $selectionRequest).environment(appState)
 }
