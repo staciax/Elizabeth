@@ -40,11 +40,6 @@ func sendHttpRequest(_ request: RequestData) async -> HTTPRequestResult {
 
     debugPrint(response)
 
-//    print("Status:", response.response?.statusCode as Any)
-//    print("Body:", response.value ?? "no body")
-//    print(type(of: response))
-//    print(type(of: response.value))
-
     let httpResponse = response.response
 
     let data = response.value
