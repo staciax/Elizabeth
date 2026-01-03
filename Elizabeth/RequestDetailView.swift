@@ -120,6 +120,9 @@ struct RequestDetailView: View {
     @State private var oauthToken: String = ""
     @State private var oauthPrefix: String = "Bearer"
 
+    // http response
+    @State var response: HTTPRequestResult?
+
     // test
     @State private var params = [
         Param(key: "test key", value: "test value"),
