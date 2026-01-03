@@ -128,15 +128,15 @@ struct RequestDetailView: View {
         Param(key: "test key", value: "test value"),
         Param(key: "test key 2", value: "test value"),
         Param(key: "test key 3", value: "test value"),
-        Param(key: "test key 3", value: "test value"),
-        Param(key: "test key 3", value: "test value"),
+        Param(key: "test key 4", value: "test value"),
+        Param(key: "test key 5", value: "test value"),
     ]
     @State private var headers = [
         Header(key: "test key", value: "test value"),
         Header(key: "test key 2", value: "test value"),
         Header(key: "test key 3", value: "test value"),
-        Header(key: "test key 3", value: "test value"),
-        Header(key: "test key 3", value: "test value"),
+        Header(key: "test key 4", value: "test value"),
+        Header(key: "test key 5", value: "test value"),
     ]
 
 //    @State private var params: [String: String] = [:]
