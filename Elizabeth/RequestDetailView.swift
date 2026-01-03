@@ -12,11 +12,10 @@ enum PanePanel: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
-// struct LineNumberCodeView: View {
+// struct CodeViewWithLineNumber: View {
 //    let content: String
 //
 //    var body: some View {
-//        // Use a Read-Only TextEditor for native selection/copy/paste
 //        TextEditor(text: .constant(content))
 //            .font(.system(size: 13, design: .monospaced))
 //            .scrollContentBackground(.hidden) // Required for custom background
@@ -26,7 +25,7 @@ enum PanePanel: String, CaseIterable, Identifiable {
 //    }
 // }
 
-struct LineNumberCodeView: View {
+struct CodeViewWithLineNumber: View {
     let content: String
     let fontSize: CGFloat = 13
 
