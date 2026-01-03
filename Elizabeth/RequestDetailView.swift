@@ -5,7 +5,77 @@
 //  Created by STACiA on 2/1/2569 BE.
 //
 
+import Alamofire
 import SwiftUI
+
+typealias HTTPRequestResult = (
+    data: String?,
+    statusCode: Int?,
+    url: URL?,
+    duration: TimeInterval,
+    requestHeaders: [String: String],
+    responseHeaders: [String: String],
+    cookies: [String],
+    errorDescription: String?
+)
+
+func sendHttpRequest(_ request: RequestData) async -> HTTPRequestResult {
+    let headers: HTTPHeaders = [
+        "Accept": "application/json",
+    ]
+
+    let startTime = CFAbsoluteTimeGetCurrent()
+
+    let task = AF.request(
+        request.url,
+        method: .init(rawValue: request.method.rawValue.uppercased()),
+        headers: headers
+    )
+    .serializingString() // .serializingData()
+
+    let endTime = CFAbsoluteTimeGetCurrent()
+    let duration = endTime - startTime
+
+    let response = await task.response
+
+    debugPrint(response)
+
+    let httpResponse = response.response
+
+    let data = response.value
+    let statusCode = httpResponse?.statusCode
+    let finalURL = httpResponse?.url
+
+    // response headers
+    var responseHeaders: [String: String] = [:]
+    if let all = httpResponse?.allHeaderFields {
+        for (k, v) in all {
+            responseHeaders[String(describing: k)] = String(describing: v)
+        }
+    }
+
+    // request headers
+    let requestHeaders = response.request?.allHTTPHeaderFields ?? [:]
+
+    // cookie
+    let cookies: [String] = responseHeaders
+        .filter { $0.key.lowercased() == "set-cookie" }
+        .map { $0.value }
+
+    // error
+    let errorDescription = response.error?.localizedDescription
+
+    return (
+        statusCode: statusCode,
+        url: finalURL,
+        duration: duration,
+        requestHeaders: requestHeaders,
+        responseHeaders: responseHeaders,
+        data: data,
+        cookies: cookies,
+        errorDescription: errorDescription
+    )
+}
 
 enum PanePanel: String, CaseIterable, Identifiable {
     case docs, params, auth, headers, body
