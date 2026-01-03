@@ -105,6 +105,9 @@ struct Header: Identifiable {
 struct RequestDetailView: View {
     @Binding var request: RequestItem
 
+    // http response
+    @State var response: HTTPRequestResult?
+
     // state
     @State private var selectedPane: PanePanel = .docs
     @State private var selectedPanel: RequestDetailPanel = .request
@@ -119,9 +122,6 @@ struct RequestDetailView: View {
     // auth oauth
     @State private var oauthToken: String = ""
     @State private var oauthPrefix: String = "Bearer"
-
-    // http response
-    @State var response: HTTPRequestResult?
 
     // test
     @State private var params = [
