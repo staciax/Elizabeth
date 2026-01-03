@@ -16,7 +16,9 @@ private struct EnvironmentVariable: Identifiable {
 }
 
 struct EnvironmentDetailView: View {
-    @State var appState = AppState()
+    @Environment(AppState.self) private var appState
+
+//    @State var environments = sampleEnvironments
 
     // state
     @State private var variables: [EnvironmentVariable] = Array(1...10).map {

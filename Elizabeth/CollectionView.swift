@@ -97,7 +97,8 @@ let sampleData: [RequestItem] = [
 ]
 
 struct CollectionView: View {
-    @Bindable var appState: AppState
+    @Environment(AppState.self) private var appState
+
     @Binding var selectionRequest: RequestItem?
 
     @State var items: [RequestItem] = sampleData
@@ -267,6 +268,5 @@ struct CollectionView: View {
 
 #Preview {
     @Previewable @State var selectionRequest: RequestItem?
-    @Previewable @State var appState = AppState()
-    CollectionView(appState: appState, selectionRequest: $selectionRequest)
+    CollectionView(selectionRequest: $selectionRequest)
 }

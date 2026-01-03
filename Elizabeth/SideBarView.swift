@@ -22,7 +22,7 @@ func getSideBarSystemImage(_ sidebar: SideBarItem) -> String {
 }
 
 struct SidebarView: View {
-    @State var appState = AppState()
+    @Environment(AppState.self) private var appState
 
     @State var selectedSideBar: SideBarItem = .collections
     @State var selectionRequest: RequestItem?
@@ -30,6 +30,8 @@ struct SidebarView: View {
     @State var visibility: NavigationSplitViewVisibility = .automatic
 
     var body: some View {
+        @Bindable var bindableAppState = appState
+
         NavigationSplitView(columnVisibility: $visibility) {
             List(selection: $selectedSideBar) {
                 NavigationLink(value: SideBarItem.collections) {
@@ -79,7 +81,7 @@ struct SidebarView: View {
             }
         }.toolbar {
             ToolbarItem {
-                Picker("", selection: $appState.selectedEnvironment) {
+                Picker("", selection: $bindableAppState.selectedEnvironment) {
                     ForEach(appState.environments, id: \.self) { env in
                         Text(env)
                     }

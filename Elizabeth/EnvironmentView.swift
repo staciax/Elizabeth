@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EnvironmentView2: View {
-    @Bindable var appState: AppState
+    @Environment(AppState.self) private var appState
 
     // state
     @State private var isHovered = false
@@ -82,6 +82,5 @@ struct EnvironmentView2: View {
 }
 
 #Preview {
-    @Previewable @State var appState = AppState()
-    EnvironmentView2(appState: appState)
+    EnvironmentView2()
 }
