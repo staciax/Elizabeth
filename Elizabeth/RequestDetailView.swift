@@ -201,11 +201,11 @@ struct RequestDetailView: View {
                             Text("Value")
                             Spacer()
                         }
-                        List($params) { param in
+                        List($params) { $param in
                             HStack(spacing: 2) {
-                                TextField("", text: param.key)
+                                TextField("", text: $param.key)
                                 Spacer()
-                                TextField("", text: param.value)
+                                TextField("", text: $param.value)
                             }
                         }
                     }
