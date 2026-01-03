@@ -40,7 +40,7 @@ struct EnvironmentView2: View {
                     }
                 }
                 message: {
-                    Text("Create new colection.")
+                    Text("Create new environment.")
                 }
                 Text("New Environment")
             }
