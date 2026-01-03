@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct ElizabethApp: App {
-    @State var appState = AppState()
+    @State private var appState = AppState()
 
     init() {
         // init data
@@ -19,7 +19,7 @@ struct ElizabethApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-        }.environment(appState)
+            ContentView().environment(appState)
+        }
     }
 }
