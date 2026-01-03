@@ -57,25 +57,6 @@ struct HTTPRequestItem {
     var children: [HTTPRequestItem]?
 }
 
-func getMethodColor(_ httpMethod: HTTPMethod) -> Color {
-    switch httpMethod {
-    case .get:
-        return Color.green
-    case .post:
-        return Color.yellow
-    case .put:
-        return Color.blue
-    case .patch:
-        return Color.purple
-    case .delete:
-        return Color.orange
-    case .head:
-        return Color.green
-    case .options:
-        return Color.red
-    }
-}
-
 struct ContentView: View {
     var body: some View {
         SidebarView()
