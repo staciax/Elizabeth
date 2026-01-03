@@ -95,5 +95,6 @@ struct SidebarView: View {
 }
 
 #Preview {
-    SidebarView()
+    @Previewable @State var appState = AppState()
+    SidebarView().environment(appState)
 }

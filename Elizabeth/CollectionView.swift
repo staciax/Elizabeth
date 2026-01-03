@@ -268,5 +268,6 @@ struct CollectionView: View {
 
 #Preview {
     @Previewable @State var selectionRequest: RequestItem?
-    CollectionView(selectionRequest: $selectionRequest)
+    @Previewable @State var appState = AppState()
+    CollectionView(selectionRequest: $selectionRequest).environment(appState)
 }

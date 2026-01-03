@@ -82,5 +82,6 @@ struct EnvironmentView2: View {
 }
 
 #Preview {
-    EnvironmentView2()
+    @Previewable @State var appState = AppState()
+    EnvironmentView2().environment(appState)
 }
