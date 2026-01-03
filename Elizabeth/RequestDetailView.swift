@@ -69,6 +69,25 @@ func statusColor(for statusCode: Int) -> Color {
     }
 }
 
+func formatDuration(_ seconds: Double) -> String {
+    let seconds = max(seconds, 0)
+
+    if seconds == 0 { return "0 ms" }
+
+    if seconds < 1 {
+        let ms = seconds * 1000
+        return String(format: "%.1f ms", ms)
+    } else if seconds < 60 {
+        return String(format: "%.2f s", seconds)
+    } else if seconds < 3600 {
+        let minutes = seconds / 60
+        return String(format: "%.2f m", minutes)
+    } else {
+        let hours = seconds / 3600
+        return String(format: "%.2f h", hours)
+    }
+}
+
 struct RequestDetailView: View {
     @Binding var request: RequestItem
 
@@ -323,25 +342,6 @@ struct RequestDetailView: View {
             }
         }
         .padding()
-    }
-
-    func formatDuration(_ seconds: Double) -> String {
-        let seconds = max(seconds, 0)
-
-        if seconds == 0 { return "0 ms" }
-
-        if seconds < 1 {
-            let ms = seconds * 1000
-            return String(format: "%.1f ms", ms)
-        } else if seconds < 60 {
-            return String(format: "%.2f s", seconds)
-        } else if seconds < 3600 {
-            let minutes = seconds / 60
-            return String(format: "%.2f m", minutes)
-        } else {
-            let hours = seconds / 3600
-            return String(format: "%.2f h", hours)
-        }
     }
 
     func makeMethodBinding() -> Binding<HTTPMethod> {
