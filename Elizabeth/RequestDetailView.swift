@@ -145,181 +145,181 @@ struct RequestDetailView: View {
 
         VStack(alignment: .leading) {
             if !isFolder {
-                Text(request.name)
-                HStack {
-                    Picker("", selection: makeMethodBinding()) {
-                        ForEach(HTTPMethod.allCases) { method in
-                            Text(method.rawValue.uppercased())
+                if selectedPanel == .request {
+                    Text(request.name)
+                    HStack {
+                        Picker("", selection: makeMethodBinding()) {
+                            ForEach(HTTPMethod.allCases) { method in
+                                Text(method.rawValue.uppercased())
+                            }
+                        }
+                        .labelsHidden()
+                        .fixedSize()
+                        TextField("Enter URL", text: makeUrlBinding())
+                            .textFieldStyle(.roundedBorder)
+                    }
+
+                    Picker("Pane", selection: $selectedPane) {
+                        ForEach(PanePanel.allCases) { pane in
+                            Text(pane.rawValue.capitalized)
                         }
                     }
                     .labelsHidden()
-                    .fixedSize()
-                    TextField("Enter URL", text: makeUrlBinding())
-                        .textFieldStyle(.roundedBorder)
-                }
-
-                Picker("Pane", selection: $selectedPane) {
-                    ForEach(PanePanel.allCases) { pane in
-                        Text(pane.rawValue.capitalized)
+                    .pickerStyle(.segmented)
+                    .onChange(of: selectedPane) { oldValue, newValue in
+                        print("Panel changed from \(oldValue) to \(newValue)!")
                     }
-                }
-                .labelsHidden()
-                .pickerStyle(.segmented)
-                .onChange(of: selectedPane) { oldValue, newValue in
-                    print("Panel changed from \(oldValue) to \(newValue)!")
-                }
 
-                // pane
-                switch selectedPane {
-                case .docs:
-                    VStack(alignment: .leading) {
-                        if let description = request.description, !description.isEmpty {
-                            Text(description).padding(.vertical, 4)
-                        }
-                    }
-                case .params:
-                    VStack(alignment: .leading) {
-                        Text("Query Params").padding(.vertical, 4)
-                        HStack {
-                            Text("Key")
-                            Spacer()
-                            Text("Value")
-                            Spacer()
-                        }
-                        List($params) { $param in
-                            HStack(spacing: 2) {
-                                TextField("", text: $param.key)
-                                Spacer()
-                                TextField("", text: $param.value)
+                    // pane
+                    switch selectedPane {
+                    case .docs:
+                        VStack(alignment: .leading) {
+                            if let description = request.description, !description.isEmpty {
+                                Text(description).padding(.vertical, 4)
                             }
                         }
-                    }
-//                    Table(params) {
-//                        TableColumn("Key", value: \.key)
-//                        TableColumn("Value", value: \.value)
-//                    }
-//                    Table(params) {
-                ////                        TableColumn("Key", value: \.key)
-                ////                        TableColumn("Value", value: \.value)
-//                    }
-//                      // TODO: table
-                case .auth:
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Picker("", selection: $selectedAuthType) {
-                                ForEach(AuthType.allCases, id: \.self) {
-                                    Text($0.rawValue).tag($0)
+                    case .params:
+                        VStack(alignment: .leading) {
+                            Text("Query Params").padding(.vertical, 4)
+                            HStack {
+                                Text("Key")
+                                Spacer()
+                                Text("Value")
+                                Spacer()
+                            }
+                            List($params) { $param in
+                                HStack(spacing: 2) {
+                                    TextField("", text: $param.key)
+                                    Spacer()
+                                    TextField("", text: $param.value)
                                 }
                             }
-                            .labelsHidden()
-                            .fixedSize()
-                            .pickerStyle(.segmented)
                         }
-                        switch selectedAuthType {
-                        case .none:
-                            EmptyView()
+                    //                    Table(params) {
+                    //                        TableColumn("Key", value: \.key)
+                    //                        TableColumn("Value", value: \.value)
+                    //                    }
+                    //                    Table(params) {
+                    ////                        TableColumn("Key", value: \.key)
+                    ////                        TableColumn("Value", value: \.value)
+                    //                    }
+                    //                      // TODO: table
+                    case .auth:
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Picker("", selection: $selectedAuthType) {
+                                    ForEach(AuthType.allCases, id: \.self) {
+                                        Text($0.rawValue).tag($0)
+                                    }
+                                }
+                                .labelsHidden()
+                                .fixedSize()
+                                .pickerStyle(.segmented)
+                            }
+                            switch selectedAuthType {
+                            case .none:
+                                EmptyView()
 
-                        case .basic:
-                            HStack {
-                                Text("Username").frame(maxWidth: 85, alignment: .leading)
-                                TextField(
-                                    "Username",
-                                    text: $username
-                                )
-                            }
-                            HStack {
-                                Text("Password").frame(maxWidth: 85, alignment: .leading)
-                                TextField(
-                                    "Username",
-                                    text: $password
-                                )
-                            }
+                            case .basic:
+                                HStack {
+                                    Text("Username").frame(maxWidth: 85, alignment: .leading)
+                                    TextField(
+                                        "Username",
+                                        text: $username
+                                    )
+                                }
+                                HStack {
+                                    Text("Password").frame(maxWidth: 85, alignment: .leading)
+                                    TextField(
+                                        "Username",
+                                        text: $password
+                                    )
+                                }
 
-                        case .oauth:
-                            HStack {
-                                Text("Token").frame(maxWidth: 85, alignment: .leading)
-                                TextField(
-                                    "Token",
-                                    text: $oauthToken
-                                )
-                            }
-                            HStack {
-                                Text("Header Prefix").frame(maxWidth: 85, alignment: .leading)
-                                TextField(
-                                    "e.g. Bearer",
-                                    text: $oauthPrefix
-                                )
-                            }
-                        }
-                    }
-                case .headers:
-                    VStack(alignment: .leading) {
-                        Text("Headers").padding(.vertical, 4)
-                        HStack {
-                            Text("Key")
-                            Spacer()
-                            Text("Value")
-                            Spacer()
-                        }
-                        List($headers) { header in
-                            HStack(spacing: 2) {
-                                TextField("", text: header.key)
-                                Spacer()
-                                TextField("", text: header.value)
-                            }
-                        }
-                    }
-                // TODO: table
-                case .body:
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Picker("", selection: $selectedBodyType) {
-                                ForEach(BodyType.allCases, id: \.self) {
-                                    Text($0.rawValue).tag($0)
+                            case .oauth:
+                                HStack {
+                                    Text("Token").frame(maxWidth: 85, alignment: .leading)
+                                    TextField(
+                                        "Token",
+                                        text: $oauthToken
+                                    )
+                                }
+                                HStack {
+                                    Text("Header Prefix").frame(maxWidth: 85, alignment: .leading)
+                                    TextField(
+                                        "e.g. Bearer",
+                                        text: $oauthPrefix
+                                    )
                                 }
                             }
-                            .labelsHidden()
-                            .fixedSize()
-                            .pickerStyle(.segmented)
                         }
-                        switch selectedBodyType {
-                        case .formData:
-                            Text("Text for form data")
-                        case .raw:
-                            TextEditor(text: $bodyRaw)
-                                .font(.system(size: 13, design: .monospaced))
-                                .scrollContentBackground(.hidden)
-                                .background(Color(white: 0.1))
-                                .foregroundColor(Color(white: 0.9))
-                                .padding(.vertical, 8)
+                    case .headers:
+                        VStack(alignment: .leading) {
+                            Text("Headers").padding(.vertical, 4)
+                            HStack {
+                                Text("Key")
+                                Spacer()
+                                Text("Value")
+                                Spacer()
+                            }
+                            List($headers) { header in
+                                HStack(spacing: 2) {
+                                    TextField("", text: header.key)
+                                    Spacer()
+                                    TextField("", text: header.value)
+                                }
+                            }
                         }
-//
+                    // TODO: table
+                    case .body:
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Picker("", selection: $selectedBodyType) {
+                                    ForEach(BodyType.allCases, id: \.self) {
+                                        Text($0.rawValue).tag($0)
+                                    }
+                                }
+                                .labelsHidden()
+                                .fixedSize()
+                                .pickerStyle(.segmented)
+                            }
+                            switch selectedBodyType {
+                            case .formData:
+                                Text("Text for form data")
+                            case .raw:
+                                TextEditor(text: $bodyRaw)
+                                    .font(.system(size: 13, design: .monospaced))
+                                    .scrollContentBackground(.hidden)
+                                    .background(Color(white: 0.1))
+                                    .foregroundColor(Color(white: 0.9))
+                                    .padding(.vertical, 8)
+                            }
+                            //
+                        }
                     }
-                }
-
-//                TODO: reponse here ?
-
-                if response != nil {
-                    VStack {
-                        LineNumberCodeView(content: response?.data ?? "")
-                            .padding(.vertical, 4)
-                        Spacer()
+                } else {
+                    if response != nil {
+                        VStack {
+                            CodeViewWithLineNumber(content: response?.data ?? "")
+                                .padding(.vertical, 4)
+                            Spacer()
+                        }
                     }
                 }
 
                 Spacer()
 
-//                HStack {
-//                    Picker("", selection: $selectedPanel) {
-//                        ForEach(RequestDetailPanel.allCases, id: \.self) {
-//                            Text($0.rawValue.capitalized).tag($0)
-//                        }
-//                    }
-//                    .labelsHidden()
-//                    .fixedSize()
-//                    .pickerStyle(.segmented)
-//                }
-//                .frame(maxWidth: .infinity)
+                HStack {
+                    Picker("", selection: $selectedPanel) {
+                        ForEach(RequestDetailPanel.allCases, id: \.self) {
+                            Text($0.rawValue.capitalized).tag($0)
+                        }
+                    }
+                    .labelsHidden()
+                    .fixedSize()
+                    .pickerStyle(.segmented)
+                }
+                .frame(maxWidth: .infinity)
             } else {
                 Text("Overview").font(.title).bold()
                 HStack(alignment: .top) {
@@ -335,8 +335,10 @@ struct RequestDetailView: View {
                     Task {
                         if let requestData = request.data {
                             response = await sendHttpRequest(requestData)
+                            selectedPanel = .response
                         }
                     }
+
                 }) {
                     Label("Send", systemImage: "play.fill")
                 }
