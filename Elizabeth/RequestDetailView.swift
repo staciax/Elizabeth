@@ -104,7 +104,6 @@ struct Header: Identifiable {
 
 struct RequestDetailView: View {
     @Binding var request: RequestItem
-    @Binding var response: HTTPRequestResult?
 
     // state
     @State private var selectedPane: PanePanel = .docs
@@ -350,10 +349,29 @@ struct RequestDetailView: View {
 //                }
 //                .frame(maxWidth: .infinity)
             } else {
-                // folder
-                Text("Else")
+                Text("Overview").font(.title).bold()
+                HStack(alignment: .top) {
+                    Text(request.description ?? "")
+                    Spacer()
+                }
+                Spacer()
             }
-        }.padding()
+        }
+        .toolbar {
+            ToolbarItem {
+                Button(action: {
+                    Task {
+                        if let requestData = request.data {
+                            response = await sendHttpRequest(requestData)
+                        }
+                    }
+                }) {
+                    Label("Send", systemImage: "play.fill")
+                }
+                .disabled(request.children != nil || request.data == nil)
+            }
+        }
+        .padding()
     }
 
     func makeMethodBinding() -> Binding<HTTPMethod> {
@@ -386,6 +404,5 @@ struct RequestDetailView: View {
         description: "Test Description",
         data: RequestData(method: .delete, url: "https://httpbin.org/get")
     )
-    @Previewable @State var response: HTTPRequestResult?
-    RequestDetailView(request: $request, response: $response)
+    RequestDetailView(request: $request)
 }

@@ -99,7 +99,6 @@ struct SidebarView: View {
 
     @State var selectedSideBar: SideBarItem = .collections
     @State var selectionRequest: RequestItem?
-    @State var httpResponse: HTTPRequestResult?
 
     @State var visibility: NavigationSplitViewVisibility = .automatic
 
@@ -153,8 +152,7 @@ struct SidebarView: View {
                             request: Binding(
                                 get: { selectedRequest },
                                 set: { selectionRequest = $0 }
-                            ),
-                            response: $httpResponse
+                        )
                         )
                     } else {
                         VStack(alignment: .leading) {
