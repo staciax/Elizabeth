@@ -325,11 +325,12 @@ struct RequestDetailView: View {
                     if response != nil {
                         Button(action: {}) {
                             let statusCode = response?.statusCode ?? 200
+                            let statusMessage = statusMessage(for: statusCode).uppercased()
                             let duration = response?.duration ?? 0.0
                             let fmtDuration = formatDuration(duration)
                             // TODO: add content-length
 
-                            Text("\(statusCode)").foregroundStyle(statusColor(for: statusCode))
+                            Text("\(statusCode) \(statusMessage)").foregroundStyle(statusColor(for: statusCode))
                             Text(" | ")
                             Text("\(fmtDuration)")
                         }
