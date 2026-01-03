@@ -141,25 +141,11 @@ struct RequestDetailView: View {
 
 //    @State private var params: [String: String] = [:]
 
-    @State private var longText = "This text can be edited by the user."
-    @State private var lineCount: Int = 1
-
     var body: some View {
+        let isFolder = (request.children != nil || request.data == nil)
+
         VStack(alignment: .leading) {
-//            ScrollView(.horizontal, showsIndicators: false) {
-//                LazyHStack(alignment: .center) {
-//                    ForEach(1 ... 5, id: \.self) { _ in
-//                        Group {
-//                            Button {} label: {
-//                                Text("GET").foregroundColor(getMethodColor(.get)).bold()
-//                                Text("New Request")
-//                            }.buttonStyle(.bordered)
-//                        }
-//                    }
-//                }
-//            }.scaledToFit()
-//            Divider()
-            if request.data != nil {
+            if !isFolder {
                 Text(request.name)
                 HStack {
                     Picker("", selection: makeMethodBinding()) {
@@ -320,23 +306,7 @@ struct RequestDetailView: View {
                             .padding(.vertical, 4)
                         Spacer()
                     }
-
-//                    ScrollView {
-//
-//
-                    ////                        Text(response?.data ?? "")
-                    ////                            .font(.system(.body, design: .monospaced))
-                    ////                            .textSelection(.enabled)
-                    ////
-                    ////                            .frame(maxWidth: .infinity, alignment: .leading)
-//                    }
                 }
-//                TextEditor(text: $longText)
-//                    .padding()
-//                    .font(.body)
-//                    .foregroundColor(.primary)
-//                    .allowsHitTesting(false)
-//                    .focusable(false)
 
                 Spacer()
 
@@ -371,7 +341,7 @@ struct RequestDetailView: View {
                 }) {
                     Label("Send", systemImage: "play.fill")
                 }
-                .disabled(request.children != nil || request.data == nil)
+                .disabled(isFolder)
             }
         }
         .padding()
