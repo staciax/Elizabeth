@@ -90,7 +90,8 @@ let sampleData: [RequestItem] = [
     ),
     RequestItem(
         id: UUID(),
-        name: "test",
+        name: "Test",
+        description: "Just for test",
         data: RequestData(method: .get, url: "https://httpbin.org/get")
     )
 ]
