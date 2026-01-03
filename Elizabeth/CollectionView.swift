@@ -146,6 +146,7 @@ struct CollectionView: View {
                                 )
 
                                 listSelection = newRequest
+                                hoveredItem = item
                             }) {
                                 Label("", systemImage: "plus").labelStyle(.iconOnly)
                             }
@@ -176,6 +177,7 @@ struct CollectionView: View {
                                     )
 
                                     listSelection = newRequest
+                                    hoveredItem = item
                                 }
 
                                 Button("Add Folder") {
@@ -196,17 +198,22 @@ struct CollectionView: View {
                                     )
 
                                     listSelection = newFolder
+                                    hoveredItem = item
                                 }
 
                                 Divider()
                                 Button("Rename") {
-                                    print("Delete action performed")
+                                    print("Rename")
                                 }
-                                Button(action: {}) {
+
+                                Button(action: {
+                                    print("Delete")
+                                }) {
                                     Text("Delete").foregroundColor(Color.red)
                                 }
+
                             } label: {
-                                Label("PDF", systemImage: "ellipsis")
+                                Label("", systemImage: "ellipsis")
                                     .labelStyle(.iconOnly)
                             }
                             .fixedSize()
@@ -216,10 +223,11 @@ struct CollectionView: View {
                         } else {
                             Menu {
                                 Button("Rename") {
-                                    print("renamed")
+                                    print("Rename")
                                 }
+
                                 Button(action: {
-                                    print("")
+                                    print("Delete")
                                 }) {
                                     Text("delete").foregroundColor(Color.red)
                                 }
