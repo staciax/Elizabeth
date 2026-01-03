@@ -138,7 +138,7 @@ struct CollectionView: View {
     @State var hoveredItem: RequestItem?
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             HStack {
                 Button(action: {
                     let newCollection = RequestItem(
@@ -154,6 +154,7 @@ struct CollectionView: View {
                 Text("New Collection")
             }
             .padding(.top, 10)
+            .padding(.leading, 10)
 
             List($items, children: \.children, selection: $selection) { $item in
                 HStack {
