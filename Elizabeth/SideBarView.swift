@@ -52,10 +52,10 @@ struct SidebarView: View {
 //                EnvironmentView2(appState: appState)
 //            }
             ZStack {
-                CollectionView(appState: appState, selectionRequest: $selectionRequest)
+                CollectionView(selectionRequest: $selectionRequest)
                     .opacity(selectedSideBar == .collections ? 1 : 0)
 
-                EnvironmentView2(appState: appState)
+                EnvironmentView2()
                     .opacity(selectedSideBar == .environments ? 1 : 0)
             }
         } detail: {
