@@ -107,35 +107,97 @@ struct CollectionView: View {
 
     var body: some View {
         VStack {
-            List(items, children: \.children, selection: $listSelection) { item in
+            List($items, children: \.children, selection: $listSelection) { $item in
                 HStack {
-                    let isFolder = (item.children != nil || item.data == nil)
+                    let isFolder = ($item.wrappedValue.children != nil || $item.wrappedValue.data == nil)
+
                     if isFolder {
                         Image(systemName: "folder").foregroundColor(.gray)
-                    } else if let data = item.data {
-                        Text(data.method.rawValue.uppercased())
+                    } else {
+                        let method = $item.data.wrappedValue?.method ?? HTTPMethod.get
+                        Text(method.rawValue.uppercased())
                             .bold()
-                            .foregroundColor(getMethodColor(data.method))
+                            .foregroundColor(getMethodColor(method))
                     }
-                    Text(item.name)
-                        .font(item.children == nil ? .body : .headline)
+                    Text($item.wrappedValue.name).font(!isFolder ? .body : .headline)
                     Spacer()
 
                     Group {
                         if isFolder {
-                            Button(action: {}) {
+                            Button(action: {
+                                print("Add request")
+
+                                let newRequest = RequestItem(
+                                    id: UUID(),
+                                    name: "New Request",
+                                    data: RequestData(
+                                        method: .get,
+                                        url: ""
+                                    )
+                                )
+
+                                if $item.children.wrappedValue == nil {
+                                    print("$item.children.nil")
+                                    $item.children.wrappedValue = []
+                                }
+
+                                $item.children.wrappedValue?.append(
+                                    newRequest
+                                )
+
+                                listSelection = newRequest
+                            }) {
                                 Label("", systemImage: "plus").labelStyle(.iconOnly)
                             }
+
                             .buttonStyle(.plain)
                             .foregroundStyle(.gray)
 
                             Menu {
-                                Button("Add request") {
-                                    print("Action 1 performed")
+                                Button("Add Request") {
+                                    print("Add request")
+
+                                    let newRequest = RequestItem(
+                                        id: UUID(),
+                                        name: "New Request",
+                                        data: RequestData(
+                                            method: .get,
+                                            url: ""
+                                        )
+                                    )
+
+                                    if $item.children.wrappedValue == nil {
+                                        print("$item.children.nil")
+                                        $item.children.wrappedValue = []
+                                    }
+
+                                    $item.children.wrappedValue?.append(
+                                        newRequest
+                                    )
+
+                                    listSelection = newRequest
                                 }
+
                                 Button("Add Folder") {
-                                    print("Action 2 performed")
+                                    print("Add folder")
+
+                                    let newFolder = RequestItem(
+                                        id: UUID(),
+                                        name: "New Folder"
+                                    )
+
+                                    if $item.children.wrappedValue == nil {
+                                        print("$item.children.nil")
+                                        $item.children.wrappedValue = []
+                                    }
+
+                                    $item.children.wrappedValue?.append(
+                                        newFolder
+                                    )
+
+                                    listSelection = newFolder
                                 }
+
                                 Divider()
                                 Button("Rename") {
                                     print("Delete action performed")
@@ -188,7 +250,7 @@ struct CollectionView: View {
                         hoveredItem = nil
                     }
                 }
-//                .border(.red)
+                //                .border(.red)
             }
         }
     }
