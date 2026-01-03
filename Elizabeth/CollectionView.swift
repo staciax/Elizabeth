@@ -96,6 +96,38 @@ let sampleData: [RequestItem] = [
     )
 ]
 
+func addRequest(to item: inout RequestItem) -> RequestItem {
+    let newRequest = RequestItem(
+        id: UUID(),
+        name: "New Request",
+        data: RequestData(
+            method: .get,
+            url: ""
+        )
+    )
+
+    if item.children == nil {
+        item.children = []
+    }
+
+    item.children?.append(newRequest)
+    return newRequest
+}
+
+func addFolder(to item: inout RequestItem) -> RequestItem {
+    let newFolder = RequestItem(
+        id: UUID(),
+        name: "New Folder"
+    )
+
+    if item.children == nil {
+        item.children = []
+    }
+
+    item.children?.append(newFolder)
+    return newFolder
+}
+
 struct CollectionView: View {
     @Environment(AppState.self) private var appState
 
@@ -103,13 +135,11 @@ struct CollectionView: View {
 
     @State var items: [RequestItem] = sampleData
 
-    @State var listSelection: RequestItem?
-
     @State var hoveredItem: RequestItem?
 
     var body: some View {
         VStack {
-            List($items, children: \.children, selection: $listSelection) { $item in
+            List($items, children: \.children, selection: $selectionRequest) { $item in
                 HStack {
                     let isFolder = ($item.wrappedValue.children != nil || $item.wrappedValue.data == nil)
 
@@ -127,79 +157,25 @@ struct CollectionView: View {
                     Group {
                         if isFolder {
                             Button(action: {
-                                print("Add request")
-
-                                let newRequest = RequestItem(
-                                    id: UUID(),
-                                    name: "New Request",
-                                    data: RequestData(
-                                        method: .get,
-                                        url: ""
-                                    )
-                                )
-
-                                if $item.children.wrappedValue == nil {
-                                    print("$item.children.nil")
-                                    $item.children.wrappedValue = []
-                                }
-
-                                $item.children.wrappedValue?.append(
-                                    newRequest
-                                )
-
-                                listSelection = newRequest
+                                let newRequest = addRequest(to: &item)
+                                selectionRequest = newRequest
                                 hoveredItem = item
                             }) {
                                 Label("", systemImage: "plus").labelStyle(.iconOnly)
                             }
-
                             .buttonStyle(.plain)
                             .foregroundStyle(.gray)
 
                             Menu {
                                 Button("Add Request") {
-                                    print("Add request")
-
-                                    let newRequest = RequestItem(
-                                        id: UUID(),
-                                        name: "New Request",
-                                        data: RequestData(
-                                            method: .get,
-                                            url: ""
-                                        )
-                                    )
-
-                                    if $item.children.wrappedValue == nil {
-                                        print("$item.children.nil")
-                                        $item.children.wrappedValue = []
-                                    }
-
-                                    $item.children.wrappedValue?.append(
-                                        newRequest
-                                    )
-
-                                    listSelection = newRequest
+                                    let newRequest = addRequest(to: &item)
+                                    selectionRequest = newRequest
                                     hoveredItem = item
                                 }
 
                                 Button("Add Folder") {
-                                    print("Add folder")
-
-                                    let newFolder = RequestItem(
-                                        id: UUID(),
-                                        name: "New Folder"
-                                    )
-
-                                    if $item.children.wrappedValue == nil {
-                                        print("$item.children.nil")
-                                        $item.children.wrappedValue = []
-                                    }
-
-                                    $item.children.wrappedValue?.append(
-                                        newFolder
-                                    )
-
-                                    listSelection = newFolder
+                                    let newFolder = addFolder(to: &item)
+                                    selectionRequest = newFolder
                                     hoveredItem = item
                                 }
 
@@ -248,11 +224,6 @@ struct CollectionView: View {
                 }
                 .tag(item)
                 .padding(.vertical, 4)
-                .onChange(of: listSelection, initial: false) { _, newValue in
-                    if let newValue {
-                        selectionRequest = newValue
-                    }
-                }
                 .onHover { isHovered in
                     if isHovered {
                         hoveredItem = item
