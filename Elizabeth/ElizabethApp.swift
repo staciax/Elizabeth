@@ -11,12 +11,6 @@ import SwiftUI
 struct ElizabethApp: App {
     @State private var appState = AppState()
 
-    init() {
-        // init data
-        appState.environments.append(contentsOf: ["Local", "Production"])
-        appState.environments2.append((name: "Globals", variables: [:]))
-    }
-
     var body: some Scene {
         WindowGroup {
             ContentView().environment(appState)
