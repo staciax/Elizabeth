@@ -124,7 +124,11 @@ struct CollectionItemView2: View {
     var body: some View {
         switch item {
         case .collection(let id, let name, let description, let children):
-            DisclosureGroup(isExpanded: $isExpanded) {
+            let nameBinding = Binding(
+                get: { name },
+                set: { item = .collection(id: id, name: $0, description: description, children: children) }
+            )
+
                 let childrenBinding = Binding(
                     get: { children },
                     set: { newChildren in
@@ -132,6 +136,7 @@ struct CollectionItemView2: View {
                     }
                 )
 
+            DisclosureGroup(isExpanded: $isExpanded) {
                 ForEach(childrenBinding.indices, id: \.self) { index in
                     CollectionItemView2(
                         item: childrenBinding[index],
@@ -143,11 +148,6 @@ struct CollectionItemView2: View {
                 }
 
             } label: {
-                let nameBinding = Binding<String>(
-                    get: { name },
-                    set: { item = .collection(id: id, name: $0, description: description, children: children) }
-                )
-
                 HStack {
                     Image(systemName: "folder")
                         .foregroundColor(.gray)
@@ -171,7 +171,9 @@ struct CollectionItemView2: View {
 
                     if isHovered {
                         Button(action: {
-                            // new request
+                            let newRequest = createRequest()
+                            selectedId = newRequest.id
+                            childrenBinding.wrappedValue.append(newRequest.item)
                         }) {
                             Label("", systemImage: "plus").labelStyle(.iconOnly)
                         }
@@ -181,9 +183,15 @@ struct CollectionItemView2: View {
                         Menu {
                             Button("Add Request") {
                                 isExpanded = true
+                                let newRequest = createRequest()
+                                selectedId = newRequest.id
+                                childrenBinding.wrappedValue.append(newRequest.item)
                             }
                             Button("Add Collection") {
                                 isExpanded = true
+                                let newCollection = createCollection()
+                                selectedId = newCollection.id
+                                childrenBinding.wrappedValue.append(newCollection.item)
                             }
                             Divider()
                             Button("Rename") {
@@ -213,12 +221,12 @@ struct CollectionItemView2: View {
             }
 
         case .request(let id, let name, let description, let data):
-            HStack {
-                let nameBinding = Binding<String>(
+            let nameBinding = Binding(
                     get: { name },
                     set: { item = .request(id: id, name: $0, description: description, data: data) }
                 )
 
+            HStack {
                 Text(data.method.rawValue.uppercased())
                     .font(.system(size: 10, weight: .bold))
                     .foregroundColor(getMethodColor(for: data.method))
@@ -271,7 +279,6 @@ struct CollectionItemView2: View {
 struct TestRView: View {
     @Environment(AppState2.self) var appState
 
-//    @Binding var collections: [CollectionItem]
     @Binding var selectedId: UUID?
 
     var body: some View {
