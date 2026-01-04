@@ -57,13 +57,13 @@ func addCollection(to item: inout RequestItem) -> RequestItem {
 struct CollectionView: View {
     @Environment(AppState.self) private var appState
 
-    @Binding var selection: RequestItem?
+    @Binding var selectedRequest: RequestItem?
 
-    @State var items: [RequestItem] = sampleData
-
-    @State var hoveredItem: RequestItem?
+    @State var hoveredItemId: UUID?
 
     var body: some View {
+        @Bindable var bindableAppState = appState
+
         VStack(alignment: .leading) {
             HStack {
                 Button(action: {
@@ -71,8 +71,8 @@ struct CollectionView: View {
                         id: UUID(),
                         name: "New Collection"
                     )
-                    items.append(newCollection)
-                    selection = newCollection
+                    appState.collections.append(newCollection)
+                    selectedRequest = newCollection
                 }) {
                     Label("", systemImage: "plus")
                         .labelStyle(.iconOnly)
@@ -82,7 +82,7 @@ struct CollectionView: View {
             .padding(.top, 10)
             .padding(.leading, 10)
 
-            List($items, children: \.children, selection: $selection) { $item in
+            List($bindableAppState.collections, children: \.children, selection: $selectedRequest) { $item in
                 HStack {
                     let isCollection = ($item.wrappedValue.children != nil || $item.wrappedValue.data == nil)
 
@@ -101,8 +101,8 @@ struct CollectionView: View {
                         if isCollection {
                             Button(action: {
                                 let newRequest = addRequest(to: &item)
-                                selection = newRequest
-                                hoveredItem = item
+                                selectedRequest = newRequest
+                                hoveredItemId = item.id
                             }) {
                                 Label("", systemImage: "plus").labelStyle(.iconOnly)
                             }
@@ -112,14 +112,14 @@ struct CollectionView: View {
                             Menu {
                                 Button("Add Request") {
                                     let newRequest = addRequest(to: &item)
-                                    selection = newRequest
-                                    hoveredItem = item
+                                    selectedRequest = newRequest
+                                    hoveredItemId = item.id
                                 }
 
                                 Button("Add Collection") {
                                     let newCollection = addCollection(to: &item)
-                                    selection = newCollection
-                                    hoveredItem = item
+                                    selectedRequest = newCollection
+                                    hoveredItemId = item.id
                                 }
 
                                 Divider()
@@ -163,15 +163,15 @@ struct CollectionView: View {
                         }
                     }
                     .padding(.trailing, 4)
-                    .opacity((hoveredItem != nil && hoveredItem == item) ? 1 : 0)
+                    .opacity((hoveredItemId != nil && hoveredItemId == item.id) ? 1 : 0)
                 }
                 .tag(item)
                 .padding(.vertical, 4)
                 .onHover { isHovered in
                     if isHovered {
-                        hoveredItem = item
+                        hoveredItemId = item.id
                     } else {
-                        hoveredItem = nil
+                        hoveredItemId = nil
                     }
                 }
                 //                .border(.red)
@@ -183,5 +183,5 @@ struct CollectionView: View {
 #Preview {
     @Previewable @State var selectionRequest: RequestItem?
     @Previewable @State var appState = AppState()
-    CollectionView(selection: $selectionRequest).environment(appState)
+    CollectionView(selectedRequest: $selectionRequest).environment(appState)
 }
