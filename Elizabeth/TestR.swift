@@ -43,6 +43,7 @@ func getAuthHeaders(from auth: AuthenticationMethod) -> [String: String]? {
     }
 }
 
+// @discardableResult
 func createRequest(
     name: String = "New Request",
     description: String = "",
@@ -81,6 +82,7 @@ func createRequest(
     return (item, id)
 }
 
+// @discardableResult
 func createCollection(
     name: String = "New Collection",
     description: String = ""
@@ -129,12 +131,12 @@ struct CollectionItemView2: View {
                 set: { item = .collection(id: id, name: $0, description: description, children: children) }
             )
 
-                let childrenBinding = Binding(
-                    get: { children },
-                    set: { newChildren in
-                        item = .collection(id: id, name: name, description: description, children: newChildren)
-                    }
-                )
+            let childrenBinding = Binding(
+                get: { children },
+                set: { newChildren in
+                    item = .collection(id: id, name: name, description: description, children: newChildren)
+                }
+            )
 
             DisclosureGroup(isExpanded: $isExpanded) {
                 ForEach(childrenBinding.indices, id: \.self) { index in
@@ -171,6 +173,7 @@ struct CollectionItemView2: View {
 
                     if isHovered {
                         Button(action: {
+                            isExpanded = true
                             let newRequest = createRequest()
                             selectedId = newRequest.id
                             childrenBinding.wrappedValue.append(newRequest.item)
@@ -222,9 +225,9 @@ struct CollectionItemView2: View {
 
         case .request(let id, let name, let description, let data):
             let nameBinding = Binding(
-                    get: { name },
-                    set: { item = .request(id: id, name: $0, description: description, data: data) }
-                )
+                get: { name },
+                set: { item = .request(id: id, name: $0, description: description, data: data) }
+            )
 
             HStack {
                 Text(data.method.rawValue.uppercased())
