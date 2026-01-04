@@ -108,9 +108,6 @@ struct CollectionItemView2: View {
     @Binding var item: CollectionItem
     @Binding var selectedId: UUID?
 
-    // เมื่อคลิก เลือก
-    var onSelect: (UUID) -> Void
-
     // closures สำหรับ เมื่อกดปุ่ม delete
     let onDelete: () -> Void
 
@@ -139,7 +136,6 @@ struct CollectionItemView2: View {
                     CollectionItemView2(
                         item: childrenBinding[index],
                         selectedId: $selectedId,
-                        onSelect: onSelect,
                         onDelete: {
                             deleteChild(at: index, from: &item)
                         }
@@ -174,6 +170,14 @@ struct CollectionItemView2: View {
                     Spacer()
 
                     if isHovered {
+                        Button(action: {
+                            // new request
+                        }) {
+                            Label("", systemImage: "plus").labelStyle(.iconOnly)
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.gray)
+
                         Menu {
                             Button("Add Request") {
                                 isExpanded = true
@@ -183,6 +187,7 @@ struct CollectionItemView2: View {
                             }
                             Divider()
                             Button("Rename") {
+                                selectedId = nil
                                 isRenaming = true
                                 isFocused = true
                             }
@@ -204,13 +209,7 @@ struct CollectionItemView2: View {
                 .padding(.vertical, 4)
                 .contentShape(.rect)
                 .onHover { isHovered = $0 }
-                .onTapGesture {
-                    if !isRenaming {
-                        onSelect(id)
-                    }
-                }
-                .background(selectedId == id ? Color.blue.opacity(0.2) : Color.clear)
-                .cornerRadius(4)
+                .tag(id)
             }
 
         case .request(let id, let name, let description, let data):
@@ -241,6 +240,7 @@ struct CollectionItemView2: View {
                 if isHovered {
                     Menu {
                         Button("Rename") {
+                            selectedId = nil
                             isRenaming = true
                             isFocused = true
                         }
@@ -263,13 +263,7 @@ struct CollectionItemView2: View {
             .padding(.vertical, 4)
             .contentShape(.rect)
             .onHover { isHovered = $0 }
-            .onTapGesture {
-                if !isRenaming {
-                    onSelect(id)
-                }
-            }
-            .background(selectedId == id ? Color.blue.opacity(0.2) : Color.clear)
-            .cornerRadius(4)
+            .tag(id)
         }
     }
 }
@@ -280,14 +274,11 @@ struct TestRView: View {
 
     var body: some View {
         VStack {
-            List {
+            List(selection: $selectedId) {
                 ForEach($collections.indices, id: \.self) { index in
                     CollectionItemView2(
                         item: $collections[index],
                         selectedId: $selectedId,
-                        onSelect: { id in
-                            selectedId = id
-                        },
                         onDelete: {
                             collections.remove(at: index)
                         }
