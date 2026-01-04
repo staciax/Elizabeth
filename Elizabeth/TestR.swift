@@ -269,18 +269,22 @@ struct CollectionItemView2: View {
 }
 
 struct TestRView: View {
-    @Binding var collections: [CollectionItem]
+    @Environment(AppState2.self) var appState
+
+//    @Binding var collections: [CollectionItem]
     @Binding var selectedId: UUID?
 
     var body: some View {
+        @Bindable var bindableAppState = appState
+
         VStack {
             List(selection: $selectedId) {
-                ForEach($collections.indices, id: \.self) { index in
+                ForEach($bindableAppState.collections.indices, id: \.self) { index in
                     CollectionItemView2(
-                        item: $collections[index],
+                        item: $bindableAppState.collections[index],
                         selectedId: $selectedId,
                         onDelete: {
-                            collections.remove(at: index)
+                            bindableAppState.collections.remove(at: index)
                         }
                     )
                 }
@@ -364,7 +368,7 @@ let sampleCollections: [CollectionItem] = [
 ]
 
 #Preview {
-    @Previewable @State var collection = sampleCollections
     @Previewable @State var selectedId: UUID?
-    TestRView(collections: $collection, selectedId: $selectedId)
+    @Previewable @State var appState = AppState2()
+    TestRView(selectedId: $selectedId).environment(appState)
 }
