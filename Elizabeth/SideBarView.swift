@@ -12,14 +12,7 @@ enum SideBarItem: String, CaseIterable {
     case environments = "Environments"
 }
 
-func getSideBarSystemImage(_ sidebar: SideBarItem) -> String {
-    switch sidebar {
-    case .collections:
-        return "rectangle.3.group"
-    case .environments:
-        return "square"
-    }
-}
+
 
 struct SidebarView: View {
     @Environment(AppState.self) private var appState
