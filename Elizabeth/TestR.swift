@@ -287,7 +287,21 @@ struct TestRView: View {
     var body: some View {
         @Bindable var bindableAppState = appState
 
-        VStack {
+        VStack(alignment: .leading) {
+            HStack {
+                Button(action: {
+                    let newCollection = createCollection()
+                    selectedId = newCollection.id
+                    bindableAppState.collections.append(newCollection.item)
+                }) {
+                    Label("", systemImage: "plus")
+                        .labelStyle(.iconOnly)
+                }
+                Text("New Collection")
+            }
+            .padding(.top, 10)
+            .padding(.leading, 10)
+
             List(selection: $selectedId) {
                 ForEach($bindableAppState.collections.indices, id: \.self) { index in
                     CollectionItemView2(
