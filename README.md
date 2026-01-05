@@ -46,13 +46,13 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [ ] Unary Minus Operator
     - [ ] Unary Plus Operator
 - [ ] Compound Assignment Operators
-- [x] [Comparison Operators](Elizabeth/Utils2.swift#L289)
+- [x] [Comparison Operators](Elizabeth/Utils2.swift#L295) <!-- isOK -->
 - [x] [Ternary Conditional Operator](Elizabeth/TestR.swift#L89) <!-- headers: finalHeaders.isEmpty ? nil : finalHeaders -->
 - [x] [Nil-Coalescing Operator](Elizabeth/TestRDetail.swift#L301) <!-- statusCode -->
 - [x] Range Operators
-    - [x] [Closed Range Operator](Elizabeth/Utils2.swift#L294)
-    - [x] [Half-Open Range Operator](Elizabeth/Utils2.swift#L300)
-    - [x] [One-Sided Ranges](Elizabeth/Utils2.swift#L305)
+    - [x] [Closed Range Operator](Elizabeth/Utils2.swift#L294) <!-- isSuccess -->
+    - [x] [Half-Open Range Operator](Elizabeth/Utils2.swift#L300) <!-- isClientError -->
+    - [x] [One-Sided Ranges](Elizabeth/Utils2.swift#L305) <!-- isServerError -->
 - [x] Logical Operators
     - [x] [Logical NOT Operator](Elizabeth/TestR.swift#L185) <!-- !self.isFocused -->
     - [ ] Logical AND Operator
@@ -70,7 +70,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 - [-] Strings Are Value Types
 - [ ] Working with Characters
 - [ ] Concatenating Strings and Characters
-- [x] [String Interpolation](Elizabeth/RequestDetailView.swift#L356)
+- [x] [String Interpolation](Elizabeth/Utils2.swift#L82)
 - [ ] Unicode
     - [ ] Unicode Scalar Values
     - [ ] Extended Grapheme Clusters
@@ -105,11 +105,14 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [ ] Fundamental Set Operations
     - [ ] Set Membership and Equality
 - [x] Dictionary
-    - [x] [Dictionary Type Shorthand Syntax](Elizabeth/Utils2.swift)
-    - [x] [Creating an Empty Dictionary](Elizabeth/Utils2.swift)
-    - [ ] Creating a Dictionary with a Dictionary Literal
-    - [ ] Accessing and Modifying a Dictionary
-    - [x] [Iterating Over a Dictionary](Elizabeth/Utils2.swift)
+    - [x] [Dictionary Type Shorthand Syntax](Elizabeth/Utils2.swift#L185) <!-- [:] -->
+    - [x] [Creating an Empty Dictionary](Elizabeth/Utils2.swift#L184) <!-- buildHeaders -->
+    - [ ] [Creating a Dictionary with a Dictionary Literal](Elizabeth/Utils2.swift#202) <!-- getDefaultHeaders -->
+    - [x] Accessing and Modifying a Dictionary
+        - [x] [isEmpty](Elizabeth/TestRDetail.swift#L152) <!-- newParams.isEmpty -->
+        - [x] [Add New](Elizabeth/TestRDetail.swift#L185) <!-- new params -->
+    - [x] [Iterating Over a Dictionary](Elizabeth/Utils2.swift#L116) <!-- request.headers -->
+        - [x] [Iterable collection of a dictionary’s keys or values](Elizabeth/TestRDetail.swift#L174) <!-- param keys -->
 
 **Control Flow**
 - [x] [For-In Loops](Elizabeth/Utils2.swift#L42)
@@ -129,7 +132,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [ ] For-In
 - [ ] Control Transfer Statements
     - [ ] Continue
-    - [ ] [Break](Elizabeth/RequestDetailView.swift#L60)
+    - [x] [Break](Elizabeth/Utils2.swift#141) <!-- break if not error -->
     - [ ] Fallthrough
     - [ ] Labeled Statements
 - [x] [Early Exit](Elizabeth/Utils2.swift#L51) <!-- guard statement -->
