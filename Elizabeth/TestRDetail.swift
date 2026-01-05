@@ -43,6 +43,39 @@ func sortedForward(_ s1: String, _ s2: String) -> Bool {
     return s1 < s2
 }
 
+func normalizeURL(_ inputUrl: String) -> String {
+    var url = inputUrl
+    
+    if url.isEmpty { return "" }
+    
+    // ลบ whitespace ช่องว่าง ส่วนท้าย ออกให้หมด
+
+    // control flow: While Loops
+    while !url.isEmpty {
+        // strings and characters: Accessing and Modifying a String - String Indices
+        let lastIndex = url.index(before: url.endIndex)
+        
+        if url[lastIndex].isWhitespace {
+            url.remove(at: lastIndex)
+        } else {
+            break
+        }
+    }
+    // https://developer.apple.com/documentation/foundation/characterset
+        
+    // ถ้าไม่มี ส่วนประกอบ :// เช่น api.github.com ให้เพิ่ม https
+    // เพิ่ม http protocol ข้างหน้า
+    if !url.contains("://") {
+        // TODO: use http instead of https
+        // currently ATS settings is not working
+
+        // strings and characters: Modifying a String - Inserting and Removing
+        url.insert(contentsOf: "https://", at: url.startIndex)
+    }
+    
+    return url
+}
+
 struct TestRDetail: View {
     @Binding var item: CollectionItem
 
