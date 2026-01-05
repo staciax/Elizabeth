@@ -28,27 +28,27 @@ func findBinding(for targetId: UUID, in items: Binding<[CollectionItem]>) -> Bin
         if getCollectionItemId(currentItem) == targetId {
             return items[index]
         }
-
+        
         // control flow: Patterns, Early Return, Continue
         guard case .collection(let id, let name, let description, let children) = currentItem else {
             continue SearchLoop
         }
 
-            let childrenBinding = Binding(
-                get: { children },
-                set: { newChildren in
-                    items.wrappedValue[index] = .collection(
-                        id: id,
-                        name: name,
+        let childrenBinding = Binding(
+            get: { children },
+            set: { newChildren in
+                items.wrappedValue[index] = .collection(
+                    id: id,
+                    name: name,
                     description: description,
-                        children: newChildren
-                    )
-                }
-            )
-
-            if let found = findBinding(for: targetId, in: childrenBinding) {
-                return found
+                    children: newChildren
+                )
             }
+        )
+
+        if let found = findBinding(for: targetId, in: childrenBinding) {
+            return found
+        }
        
     }
 
