@@ -12,18 +12,61 @@ enum SideBarItem: String, CaseIterable {
     case environments = "Environments"
 }
 
+func getCollectionItemId(_ item: CollectionItem) -> UUID {
+    switch item {
+    case .collection(let id, _, _, _):
+        return id
+    case .request(let id, _, _, _):
+        return id
+    }
+}
 
+func findBinding(for targetId: UUID, in items: Binding<[CollectionItem]>) -> Binding<CollectionItem>? {
+    for index in items.wrappedValue.indices {
+        let currentItem = items.wrappedValue[index]
+
+        if getCollectionItemId(currentItem) == targetId {
+            return items[index]
+        }
+
+        if case .collection(let id, let name, let desc, let children) = currentItem {
+            let childrenBinding = Binding(
+                get: { children },
+                set: { newChildren in
+                    items.wrappedValue[index] = .collection(
+                        id: id,
+                        name: name,
+                        description: desc,
+                        children: newChildren
+                    )
+                }
+            )
+
+            if let found = findBinding(for: targetId, in: childrenBinding) {
+                return found
+            }
+        }
+    }
+
+    return nil
+}
 
 struct SidebarView: View {
     @Environment(AppState.self) private var appState
+    @Environment(AppState2.self) private var appState2
 
     @State var selectedSideBar: SideBarItem = .collections
     @State var selectionRequest: RequestItem?
 
+    // state
+    @State private var selectedId: UUID?
+
+    // test
     @State var visibility: NavigationSplitViewVisibility = .automatic
 
     var body: some View {
         @Bindable var bindableAppState = appState
+        @Bindable var bindableAppState2 = appState2
 
         NavigationSplitView(columnVisibility: $visibility) {
             List(selection: $selectedSideBar) {
@@ -44,8 +87,9 @@ struct SidebarView: View {
 //            case .environments:
 //                EnvironmentView2(appState: appState)
 //            }
+
             ZStack {
-                CollectionView(selectionRequest: $selectionRequest)
+                TestRView(selectedId: $selectedId)
                     .opacity(selectedSideBar == .collections ? 1 : 0)
 
                 EnvironmentView2()
@@ -55,18 +99,13 @@ struct SidebarView: View {
             // TODO: use ZStack for persistant view
             switch selectedSideBar {
             case .collections:
-                if let selectedRequest = selectionRequest {
-                    RequestDetailView(
-                        request: Binding(
-                            get: { selectedRequest },
-                            set: { selectionRequest = $0 }
-                        )
-                    )
+                if let selectedId, let itemBinding = findBinding(for: selectedId, in: $bindableAppState2.collections) {
+                    TestRDetail(item: itemBinding)
+//                        .id(selectedId)
                 } else {
                     ContentUnavailableView(
                         "No Request Selected",
-                        systemImage: "doc.text.magnifyingglass",
-                        description: Text("Select a request to view details")
+                        systemImage: "mail.and.text.magnifyingglass"
                     )
                 }
             case .environments:
@@ -89,5 +128,6 @@ struct SidebarView: View {
 
 #Preview {
     @Previewable @State var appState = AppState()
-    SidebarView().environment(appState)
+    @Previewable @State var appState2 = AppState2()
+    SidebarView().environment(appState).environment(appState2)
 }
