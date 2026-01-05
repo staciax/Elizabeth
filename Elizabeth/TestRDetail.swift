@@ -148,6 +148,8 @@ struct TestRDetail: View {
                             set: { newParams in
 //                                   print(newParams)
                                 var data = data
+                                
+                                // collection types: Dictionaries - Accessing and Modifying a Dictionary (isEmpty)
                                 data.params = newParams.isEmpty ? nil : newParams
                                 item = .request(id: id, name: name, description: description, data: data)
                             }
@@ -168,6 +170,7 @@ struct TestRDetail: View {
                             Spacer()
                         }.padding(.vertical, 4)
 
+                        // collection types: Dictionaries - Iterating Over a Dictionary (keys)
                         List(paramSortedkeys, id: \.self) { key in
                             HStack {
                                 TextField("Key", text: .constant(key))
@@ -178,9 +181,21 @@ struct TestRDetail: View {
                         }
 
                         Button(action: {
-                            var updated = params
-                            updated["param-\(params.count)"] = "test"
-                            bindingParams.wrappedValue = updated
+                            var copyParams = params
+
+                            // collection types: Dictionaries - Accessing and Modifying a Dictionary (add new)
+
+                            var count = copyParams.count
+                            var newParamKey = "param-\(count)"
+                            while copyParams.keys.contains(newParamKey) {
+                                newParamKey = "param-\(count)"
+                                count += 1
+                            }
+
+                            // for test
+                            copyParams[newParamKey] = "test"
+
+                            bindingParams.wrappedValue = copyParams
                         }) {
                             Label("Add Param", systemImage: "plus")
                         }
@@ -285,9 +300,19 @@ struct TestRDetail: View {
                             }
 
                             Button(action: {
-                                var updated = headers
-                                updated["New-Header-\(headers.count)"] = ""
-                                bindingHeaders.wrappedValue = updated
+                                var copyHeaders = headers
+                                
+                                var count = copyHeaders.count
+                                var newHeaderKey = "New-Header-\(count)"
+                                while copyHeaders.keys.contains(newHeaderKey) {
+                                    newHeaderKey = "param-\(count)"
+                                    count += 1
+                                }
+
+                                // for test
+                                copyHeaders[newHeaderKey] = "test"
+                                
+                                bindingHeaders.wrappedValue = copyHeaders
                             }) {
                                 Label("Add Header", systemImage: "plus")
                             }
