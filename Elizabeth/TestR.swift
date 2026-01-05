@@ -155,9 +155,9 @@ struct CollectionItemView2: View {
                 ForEach(childrenBinding.indices, id: \.self) { index in
                     CollectionItemView2(
                         item: childrenBinding[index],
-                        selectedId: self.$selectedId,
+                        selectedId: $selectedId,
                         onDelete: {
-                            deleteChild(at: index, from: &self.item)
+                            deleteChild(at: index, from: &item)
                         }
                     )
                 }
