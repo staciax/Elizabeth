@@ -13,14 +13,14 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 - [x] Semicolons
 - [x] Integers
     - [ ] Integer Bounds
-    - [ ] Int
+    - [x] [Int](Elizabeth/Utils2.swift#248)
     - [ ] UInt
-- [ ] Floating-Point Numbers
+- [x] [Floating-Point Numbers]()
 - [x] [Type Safety and Type Inference](Elizabeth/Utils2.swift#L52)
 - [ ] Numeric Literals
-- [ ] Numeric Type Conversion
-    - [ ] Integer Conversion
-    - [ ] Floating-Point Conversion
+- [x] Numeric Type Conversion
+    - [x] [Integer Conversion](Elizabeth/TestRDetail.swift#L421) <!-- Int64 -->
+    - [x] [Floating-Point Conversion](Elizabeth/Utils2.swift#L361) <!--  Double(bytes) -->
 - [x] [Type Aliases](Elizabeth/Utils2.swift#L87) <!-- HTTPReponse -->
 - [x] [Booleans](Elizabeth/TestRDetail.swift#L46) <!-- isLoading -->
 - [x] [Tuples](Elizabeth/Utils2.swift#87) <!-- HTTPReponse -->
@@ -38,14 +38,14 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 **Basic Operators**
 - [x] [Assignment Operator](Elizabeth/ElizabethApp.swift)
 - [x] Arithmetic Operators
-    - [ ] Addition (+)
+    - [x] [Addition (+)](Elizabeth/TestRDetail.swift#443)
     - [x] [Subtraction (-)](Elizabeth/TestRDetail.swift#283) <!-- duration -->
     - [x] [Multiplication (*)](Elizabeth/Utils2.swift#L48) <!-- formatDuration -->
     - [x] [Division (/)](Elizabeth/Utils2.swift#L48)  <!-- formatDuration -->
     - [ ] Remainder Operator
     - [ ] Unary Minus Operator
     - [ ] Unary Plus Operator
-- [ ] Compound Assignment Operators
+- [x] [Compound Assignment Operators](Elizabeth/Utils2.swift#) <!-- result += "UTF-8: " -->
 - [x] [Comparison Operators](Elizabeth/Utils2.swift#L295) <!-- isOK -->
 - [x] [Ternary Conditional Operator](Elizabeth/TestR.swift#L89) <!-- headers: finalHeaders.isEmpty ? nil : finalHeaders -->
 - [x] [Nil-Coalescing Operator](Elizabeth/TestRDetail.swift#L301) <!-- statusCode -->
@@ -55,7 +55,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [x] [One-Sided Ranges](Elizabeth/Utils2.swift#L305) <!-- isServerError -->
 - [x] Logical Operators
     - [x] [Logical NOT Operator](Elizabeth/TestR.swift#L185) <!-- !self.isFocused -->
-    - [ ] Logical AND Operator
+    - [x] [Logical AND Operator](Elizabeth/TestRDetail.swift#L404) <!-- hasPrefix && hasSuffix -->
     - [x] [Logical OR Operator](Elizabeth/TestRDetail.swift#L375) <!-- isCollection -->
 - [ ] Combining Logical Operators
 - [ ] Explicit Parentheses
@@ -71,30 +71,33 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 - [ ] Working with Characters
 - [ ] Concatenating Strings and Characters
 - [x] [String Interpolation](Elizabeth/Utils2.swift#L82)
-- [ ] Unicode
+- [x] Unicode
     - [ ] Unicode Scalar Values
     - [ ] Extended Grapheme Clusters
 - [ ] Counting Characters
-- [ ] Accessing and Modifying a String
-    - [ ] String Indices
-    - [ ] Inserting and Removing
+- [x] Accessing and Modifying a String
+    - [x] [String Indices](Elizabeth/TestRDetail.swift#L87) <!-- let lastIndex -->
+    - [x] [Inserting](Elizabeth/TestRDetail.swift#L104)  <!-- url insert -- >
+    - [ ] Removing
 - [ ] Substrings
-- [ ] Comparing Strings
-    - [ ] String and Character Equality
-    - [ ] Prefix and Suffix Equality
-- [ ] Unicode Representations of Strings
-    - [ ] UTF-8 Representation
-    - [ ] UTF-16 Representation
-    - [ ] Unicode Scalar Representation
-
+- [x] Comparing Strings 
+    - [x] [String and Character Equality](Elizabeth/Utils2.swift#L111) <!-- $0.key.lowercased() == "set-cookie" -->
+    - [x] [Prefix and Suffix Equality](Elizabeth/TestRDetail.swift#L404) <!-- .hasPrefix("{") && .hasSuffix("}") -->
+- [x] Unicode Representations of Strings
+    - [x] [UTF-8 Representation](Elizabeth/Utils2.swift#L310) <!-- getEncodingDebug -- >
+    - [x] [UTF-16 Representation](Elizabeth/Utils2.swift#L310) <!-- getEncodingDebug -- >
+    - [x] [Unicode Scalar Representation](Elizabeth/Utils2.swift#L310) <!-- getEncodingDebug -- >
+ 
 **Collection Types**
 - [x] Array
-    - [x] [Array Type Shorthand Syntax](Elizabeth/AppState2.swift#L12)
-    - [x] [Creating an Empty Array](Elizabeth/AppState2.swift#L12)
+    - [x] [Array Type Shorthand Syntax](Elizabeth/AppState2.swift#L12) <!-- collections -->
+    - [x] [Creating an Empty Array](Elizabeth/AppState2.swift#L12) <!-- collections -->
     - [ ] Creating an Array with a Default Value
     - [ ] Creating an Array by Adding Two Arrays Together
-    - [ ] Creating an Array with an Array Literal
-    - [ ] Accessing and Modifying an Array
+    - [x] [Creating an Array with an Array Literal](Elizabeth/AppState2.swift#L18) <!-- collections.append(contentsOf -->
+    - [x] Accessing and Modifying an Array
+        - [ ] Accessing
+        - [ ] Modifying
     - [ ] Iterating Over an Array
 - [ ] Set
     - [ ] Creating and Initializing an Empty Set
@@ -107,7 +110,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 - [x] Dictionary
     - [x] [Dictionary Type Shorthand Syntax](Elizabeth/Utils2.swift#L185) <!-- [:] -->
     - [x] [Creating an Empty Dictionary](Elizabeth/Utils2.swift#L184) <!-- buildHeaders -->
-    - [ ] [Creating a Dictionary with a Dictionary Literal](Elizabeth/Utils2.swift#202) <!-- getDefaultHeaders -->
+    - [x] [Creating a Dictionary with a Dictionary Literal](Elizabeth/Utils2.swift#219) <!-- getDefaultHeaders -->
     - [x] Accessing and Modifying a Dictionary
         - [x] [isEmpty](Elizabeth/TestRDetail.swift#L152) <!-- newParams.isEmpty -->
         - [x] [Add New](Elizabeth/TestRDetail.swift#L185) <!-- new params -->
@@ -117,7 +120,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 **Control Flow**
 - [x] [For-In Loops](Elizabeth/Utils2.swift#L42)
 - [x] While Loops
-    - [ ] While
+    - [x] [While](Elizabeth/TestRDetail.swift#L54) <!-- normalizeURL -->
     - [ ] Repeat-While Loops
 - [x] Conditional Statements
     - [x] If
@@ -150,7 +153,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 - [x] Function Argument Labels and Parameter Names
     - [x] [Specifying Argument Labels](Elizabeth/Utils2.swift) <!-- getMethodColor(for:) -->
     - [x] [Omitting Argument Labels](Elizabeth/Utils2.swift) <!-- formatDuration(_:) -->
-    - [x] [Default Parameter Values](Elizabeth/Utils2.swift#L47)
+    - [x] [Default Parameter Values](Elizabeth/Utils2.swift#L104) <!-- sendHttpRequest2 maxAttempts = 3 -->
     - [x] [Variadic Parameters](Elizabeth/Utils2.swift#L21) <!-- buildHeaders, buildParams -->
     - [x] [In-Out Parameters](Elizabeth/TestR.swift#L122) <!-- deleteChild -->
 - [x] Function Types
