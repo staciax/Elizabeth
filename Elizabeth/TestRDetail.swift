@@ -29,6 +29,10 @@ func isCollection(for item: CollectionItem) -> Bool {
     return false
 }
 
+func sortedForward(_ s1: String, _ s2: String) -> Bool {
+    return s1 < s2
+}
+
 struct TestRDetail: View {
     @Binding var item: CollectionItem
 
@@ -150,7 +154,12 @@ struct TestRDetail: View {
                         )
 
                         let params = bindingParams.wrappedValue
-                        let paramkeys = params.keys.sorted()
+                        
+                        // closures: The Sorted Method
+                        let _ = params.keys.sorted(by: sortedForward)
+                        
+                        // closures: Closure Expression Syntax
+                        let paramSortedkeys = params.keys.sorted(by: { (s1: String, s2: String) -> Bool in return s1 < s2 })
 
                         HStack {
                             Text("Key").bold()
@@ -159,7 +168,7 @@ struct TestRDetail: View {
                             Spacer()
                         }.padding(.vertical, 4)
 
-                        List(paramkeys, id: \.self) { key in
+                        List(paramSortedkeys, id: \.self) { key in
                             HStack {
                                 TextField("Key", text: .constant(key))
                                 Spacer()
