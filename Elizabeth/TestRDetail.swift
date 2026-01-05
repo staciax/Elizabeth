@@ -298,6 +298,8 @@ struct TestRDetail: View {
 
                 } else {
                     if let response {
+                        // the basics: Providing a Fallback Value
+                        // basic operators: Nil-Coalescing Operator
                         let statusCode = response.statusCode ?? 200
                         let statusMessage = statusMessage(for: statusCode).uppercased()
                         let duration = response.duration
@@ -351,7 +353,8 @@ struct TestRDetail: View {
                     Task {
                         // ไม่ต้องแล้ว เพราะ disable ปุ่มไปแล้ว
                         // if isLoading { return }
-
+                        
+                        // control flow: Deferred Actions
                         defer { isLoading = false }
                         defer { currentTab = .response }
 
