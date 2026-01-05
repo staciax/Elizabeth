@@ -58,7 +58,7 @@ func getAuthHeaders(from auth: AuthenticationMethod) -> [String: String]? {
 }
 
 // @discardableResult
-func createRequest(
+func addRequest(
     name: String = "New Request",
     description: String = "",
     method: HTTPMethod = .get,
@@ -105,7 +105,7 @@ func createRequest(
 }
 
 // @discardableResult
-func createCollection(
+func addCollection(
     name: String = "New Collection",
     description: String = ""
 ) -> (item: CollectionItem, id: UUID) {
@@ -200,7 +200,7 @@ struct CollectionItemView2: View {
                     if isHovered {
                         Button(action: {
                             isExpanded = true
-                            let newRequest = createRequest()
+                            let newRequest = addRequest()
                             selectedId = newRequest.id
                             childrenBinding.wrappedValue.append(newRequest.item)
                         }) {
@@ -212,13 +212,13 @@ struct CollectionItemView2: View {
                         Menu {
                             Button("Add Request") {
                                 isExpanded = true
-                                let newRequest = createRequest()
+                                let newRequest = addRequest()
                                 selectedId = newRequest.id
                                 childrenBinding.wrappedValue.append(newRequest.item)
                             }
                             Button("Add Collection") {
                                 isExpanded = true
-                                let newCollection = createCollection()
+                                let newCollection = addCollection()
                                 selectedId = newCollection.id
                                 childrenBinding.wrappedValue.append(newCollection.item)
                             }
@@ -317,7 +317,7 @@ struct TestRView: View {
             HStack {
                 let createNewCollection: () -> Void = {
                     // the basics: Semicolons
-                    let newCollection = createCollection(); selectedId = newCollection.id; bindableAppState.collections.append(newCollection.item)
+                    let newCollection = addCollection(); selectedId = newCollection.id; bindableAppState.collections.append(newCollection.item)
                 }
                 
                 // control flow: Checking API Availability
