@@ -22,6 +22,16 @@ enum DetailTab: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
+enum BodyType: String, CaseIterable, Identifiable {
+    case none
+    case formData = "forn-data"
+//    case xWwwFormUrlencoded = "x-www-form-urlencoded"
+    case raw = "raw"
+//    case binary = "binary"
+//    case graphQL = "GraphQL"
+    var id: Self { self }
+}
+
 func isCollection(for item: CollectionItem) -> Bool {
     if case .collection = item {
         return true
@@ -41,6 +51,9 @@ struct TestRDetail: View {
 
     // state สำหรับ section ใน request ต่างๆ
     @State private var selectedSection: RequestSection = .docs
+    
+    // state สำหรับ เลือกวิธีส่ง body
+    @State private var selectedBodyType: BodyType = .none
 
     // state สำหรับ ปิดใช้งานปุ่ม ช่วง loading
     @State private var isLoading: Bool = false
@@ -184,7 +197,6 @@ struct TestRDetail: View {
                             var copyParams = params
 
                             // collection types: Dictionaries - Accessing and Modifying a Dictionary (add new)
-
                             var count = copyParams.count
                             var newParamKey = "param-\(count)"
                             while copyParams.keys.contains(newParamKey) {
@@ -318,7 +330,38 @@ struct TestRDetail: View {
                             }
                         }
                     case .body:
-                        Text("Body")
+                        HStack {
+                            Picker("", selection: $selectedBodyType) {
+                                ForEach(BodyType.allCases, id: \.self) {
+                                    Text($0.rawValue).tag($0)
+                                }
+                            }
+                            .labelsHidden()
+                            .fixedSize()
+                        }
+                        switch selectedBodyType {
+                        case .none:
+                            Text("This request does not a body.")
+                                .font(.body)
+                        case .formData:
+                            Text("Currently dost not support.")
+                                .font(.body)
+                        case .raw:
+                            let bindingBodyContent = Binding(
+                                get: { data.bodyContent ?? ""},
+                                set: { newBodyContent in
+                                    var data = data
+                                    data.bodyContent = newBodyContent
+                                    item = .request(id: id, name: name, description: description, data: data)
+                                }
+                            )
+                            
+                            TextEditor(text: bindingBodyContent)
+                                .background(Color(white: 0.1))
+                                .foregroundColor(Color(white: 0.9))
+                                .scrollContentBackground(.hidden)
+                                .font(.system(size: 13, design: .monospaced))
+                        }
                     }
 
                 } else {
