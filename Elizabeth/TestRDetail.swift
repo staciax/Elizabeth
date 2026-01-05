@@ -384,12 +384,17 @@ struct TestRDetail: View {
                         let statusMessage = statusMessage(for: statusCode).uppercased()
                         let duration = response.duration
                         let fmtDuration = formatDuration(duration)
-                        // TODO: add content-length
+
+                        // basic operators: Arithmetic Operators - Addition Operator
+                        let totalResponseSize = response.bodySizeBytes + response.headerSizeBytes
+                        let fmtResponseSize = formatBytes(Int(totalResponseSize))
 
                         Button(action: {}) {
                             Text("\(statusCode) \(statusMessage)").foregroundStyle(statusColor(for: statusCode))
                             Text(" | ")
                             Text("\(fmtDuration)")
+                            Text(" | ")
+                            Text("\(totalResponseSize)")
                         }
 
                         TextEditor(text: .constant(response.data ?? ""))
