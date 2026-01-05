@@ -429,11 +429,14 @@ struct TestRDetail: View {
 //                    assert(!isCollection(for: item))
 //                    precondition(!isCollection(for: item), "Colection item must be request.")
 
-                    guard case .request(let id, let name, _, let requestData) = item else {
+                    guard case .request(_, let name, _, var requestData) = item else {
                         return
                     }
 
-                    print("LOG: request \(id):\(name)")
+                    let url = normalizeURL(requestData.url)
+                    requestData.url = url
+                    
+                    print("LOG: request to \(url):\(name)")
 
                     Task {
                         // ไม่ต้องแล้ว เพราะ disable ปุ่มไปแล้ว
@@ -442,13 +445,17 @@ struct TestRDetail: View {
                         // control flow: Deferred Actions
                         defer { isLoading = false }
                         defer { currentTab = .response }
+                        defer {
+                            if let response, let data = response.data {
+                                print(getEncodingDebug(data))
+                            }
+                        }
 
                         // set loading เป็น true เพื่อปิดใช้งานปุ่ม
 
                         isLoading = true
 
-                        // ทำการ http request ไปยัง url
-
+                        // ทำการ http request
                         response = await sendHttpRequest2(requestData)
                     }
 
