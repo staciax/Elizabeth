@@ -149,13 +149,13 @@ struct CollectionItemView2: View {
         case .collection(let id, let name, let description, let children):
             let nameBinding = Binding(
                 get: { name },
-                set: { self.item = .collection(id: id, name: $0, description: description, children: children) }
+                set: { item = .collection(id: id, name: $0, description: description, children: children) }
             )
 
             let childrenBinding = Binding(
                 get: { children },
                 set: { newChildren in
-                    self.item = .collection(id: id, name: name, description: description, children: newChildren)
+                    item = .collection(id: id, name: name, description: description, children: newChildren)
                 }
             )
 
@@ -175,15 +175,15 @@ struct CollectionItemView2: View {
                     Image(systemName: "folder")
                         .foregroundColor(.gray)
 
-                    if self.isRenaming {
+                    if isRenaming {
                         TextField("Name", text: nameBinding)
                             .font(.headline)
                             .textFieldStyle(.plain)
-                            .focused(self.$isFocused)
-                            .onSubmit { self.isRenaming = false }
-                            .onChange(of: self.isFocused) {
-                                if !self.isFocused {
-                                    self.isRenaming = false
+                            .focused($isFocused)
+                            .onSubmit { isRenaming = false }
+                            .onChange(of: isFocused) {
+                                if !$0 {
+                                    isRenaming = false
                                 }
                             }
                     } else {
@@ -192,11 +192,11 @@ struct CollectionItemView2: View {
 
                     Spacer()
 
-                    if self.isHovered {
+                    if isHovered {
                         Button(action: {
-                            self.isExpanded = true
+                            isExpanded = true
                             let newRequest = createRequest()
-                            self.selectedId = newRequest.id
+                            selectedId = newRequest.id
                             childrenBinding.wrappedValue.append(newRequest.item)
                         }) {
                             Label("", systemImage: "plus").labelStyle(.iconOnly)
@@ -206,25 +206,25 @@ struct CollectionItemView2: View {
 
                         Menu {
                             Button("Add Request") {
-                                self.isExpanded = true
+                                isExpanded = true
                                 let newRequest = createRequest()
-                                self.selectedId = newRequest.id
+                                selectedId = newRequest.id
                                 childrenBinding.wrappedValue.append(newRequest.item)
                             }
                             Button("Add Collection") {
-                                self.isExpanded = true
+                                isExpanded = true
                                 let newCollection = createCollection()
-                                self.selectedId = newCollection.id
+                                selectedId = newCollection.id
                                 childrenBinding.wrappedValue.append(newCollection.item)
                             }
                             Divider()
                             Button("Rename") {
-                                self.selectedId = nil
-                                self.isRenaming = true
-                                self.isFocused = true
+                                selectedId = nil
+                                isRenaming = true
+                                isFocused = true
                             }
                             Button(action: {
-                                self.onDelete()
+                                onDelete()
                             }) {
                                 Text("delete").foregroundColor(Color.red)
                             }
@@ -240,14 +240,14 @@ struct CollectionItemView2: View {
                 }
                 .padding(.vertical, 4)
                 .contentShape(.rect)
-                .onHover { self.isHovered = $0 }
+                .onHover { isHovered = $0 }
                 .tag(id)
             }
 
         case .request(let id, let name, let description, let data):
             let nameBinding = Binding(
                 get: { name },
-                set: { self.item = .request(id: id, name: $0, description: description, data: data) }
+                set: { item = .request(id: id, name: $0, description: description, data: data) }
             )
 
             HStack {
@@ -255,13 +255,13 @@ struct CollectionItemView2: View {
                     .bold()
                     .foregroundColor(getMethodColor(for: data.method))
 
-                if self.isRenaming {
+                if isRenaming {
                     TextField("Name", text: nameBinding)
                         .textFieldStyle(.plain)
-                        .focused(self.$isFocused)
-                        .onSubmit { self.isRenaming = false }
-                        .onChange(of: self.isFocused) {
-                            if !self.isFocused { self.isRenaming = false }
+                        .focused($isFocused)
+                        .onSubmit { isRenaming = false }
+                        .onChange(of: isFocused) {
+                            if !isFocused { isRenaming = false }
                         }
                 } else {
                     Text(name).font(.body)
@@ -269,16 +269,16 @@ struct CollectionItemView2: View {
 
                 Spacer()
 
-                if self.isHovered {
+                if isHovered {
                     Menu {
                         Button("Rename") {
-                            self.selectedId = nil
-                            self.isRenaming = true
-                            self.isFocused = true
+                            selectedId = nil
+                            isRenaming = true
+                            isFocused = true
                         }
 
                         Button(action: {
-                            self.onDelete()
+                            onDelete()
                         }) {
                             Text("delete").foregroundColor(Color.red)
                         }
@@ -294,7 +294,7 @@ struct CollectionItemView2: View {
             }
             .padding(.vertical, 4)
             .contentShape(.rect)
-            .onHover { self.isHovered = $0 }
+            .onHover { isHovered = $0 }
             .tag(id)
         }
     }
@@ -312,7 +312,7 @@ struct TestRView: View {
             HStack {
                 let createNewCollection: () -> Void = {
                     // the basics: Semicolons
-                    let newCollection = createCollection(); self.selectedId = newCollection.id; bindableAppState.collections.append(newCollection.item)
+                    let newCollection = createCollection(); selectedId = newCollection.id; bindableAppState.collections.append(newCollection.item)
                 }
                 
                 // control flow: Checking API Availability
@@ -334,11 +334,11 @@ struct TestRView: View {
             .padding(.top, 10)
             .padding(.leading, 10)
 
-            List(selection: self.$selectedId) {
+            List(selection: $selectedId) {
                 ForEach($bindableAppState.collections.indices, id: \.self) { index in
                     CollectionItemView2(
                         item: $bindableAppState.collections[index],
-                        selectedId: self.$selectedId,
+                        selectedId: $selectedId,
                         onDelete: {
                             bindableAppState.collections.remove(at: index)
                         }
