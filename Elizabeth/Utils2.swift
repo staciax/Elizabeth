@@ -92,7 +92,9 @@ typealias HTTPReponse = (
     requestHeaders: [String: String],
     responseHeaders: [String: String],
     cookies: [String],
-    errorDescription: String?
+    errorDescription: String?,
+    headerSizeBytes: Int64,
+    bodySizeBytes: Int64
 )
 
 // functions: Functions With Multiple Parameters
@@ -161,6 +163,16 @@ func sendHttpRequest2(
 
     // the basics: Force Unwrapping
     let response = finalResponse! 
+    
+    // metrics
+    var headerBytes: Int64 = 0
+    var bodyBytes: Int64 = 0
+
+    if let metrics = response.metrics,
+       let transaction = metrics.transactionMetrics.last {
+        headerBytes = transaction.countOfResponseHeaderBytesReceived
+        bodyBytes = transaction.countOfResponseBodyBytesReceived
+    }
 
     debugPrint(response)
 
@@ -193,7 +205,9 @@ func sendHttpRequest2(
         responseHeaders: responseHeaders,
         data: data,
         cookies: cookies,
-        errorDescription: errorDescription
+        errorDescription: errorDescription,
+        headerSizeBytes: headerBytes,
+        bodySizeBytes: bodyBytes
     )
 }
 
