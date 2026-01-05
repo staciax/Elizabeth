@@ -37,6 +37,7 @@ typealias RequestData2 = (
     auth: AuthenticationMethod?
 )
 
+// enumerations: Recursive Enumerations
 indirect enum CollectionItem {
     case collection(id: UUID, name: String, description: String, children: [CollectionItem])
     case request(id: UUID, name: String, description: String, data: RequestData2)
@@ -119,6 +120,7 @@ func createCollection(
     return (item, id)
 }
 
+// functions: In-Out Parameters
 func deleteChild(at index: Int, from item: inout CollectionItem) {
     // control flow: Patterns
     if case .collection(let id, let name, let description, var children) = item {
@@ -161,6 +163,8 @@ struct CollectionItemView2: View {
 
             DisclosureGroup(isExpanded: $isExpanded) {
                 ForEach(childrenBinding.indices, id: \.self) { index in
+
+                    // enumerations: Recursive Enumerations
                     CollectionItemView2(
                         item: childrenBinding[index],
                         selectedId: $selectedId,

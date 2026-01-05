@@ -107,14 +107,14 @@ func sendHttpRequest2(
 
     func extractCookies(from headers: [String: String]) -> [String] {
         return headers
+            // strings and characters: Comparing Strings - String and Character Equality
             .filter { $0.key.lowercased() == "set-cookie" }
             .map { $0.value }
     }
 
     var headers: HTTPHeaders = []
     
-    // collection types: Dictionaries - Creating an Empty Dictionary
-    // collection types: Dictionaries - Creating an Empty Dictionary
+    // collection types: Dictionaries - Dictionary Type Shorthand Syntax, Creating an Empty Dictionary
     for (key, value) in request.headers ?? [:] {
         headers[key] = value
     }
