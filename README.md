@@ -84,9 +84,9 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [x] [String and Character Equality](Elizabeth/Utils2.swift#L111) <!-- $0.key.lowercased() == "set-cookie" -->
     - [x] [Prefix and Suffix Equality](Elizabeth/TestRDetail.swift#L404) <!-- .hasPrefix("{") && .hasSuffix("}") -->
 - [x] Unicode Representations of Strings
-    - [x] [UTF-8 Representation](Elizabeth/Utils2.swift#L310) <!-- getEncodingDebug -- >
-    - [x] [UTF-16 Representation](Elizabeth/Utils2.swift#L310) <!-- getEncodingDebug -- >
-    - [x] [Unicode Scalar Representation](Elizabeth/Utils2.swift#L310) <!-- getEncodingDebug -- >
+    - [x] [UTF-8 Representation](Elizabeth/Utils2.swift#L310) <!-- getEncodingDebug -->
+    - [x] [UTF-16 Representation](Elizabeth/Utils2.swift#L310) <!-- getEncodingDebug -->
+    - [x] [Unicode Scalar Representation](Elizabeth/Utils2.swift#L310) <!-- getEncodingDebug -->
  
 **Collection Types**
 - [x] Array
@@ -95,9 +95,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [ ] Creating an Array with a Default Value
     - [ ] Creating an Array by Adding Two Arrays Together
     - [x] [Creating an Array with an Array Literal](Elizabeth/AppState2.swift#L18) <!-- collections.append(contentsOf -->
-    - [x] Accessing and Modifying an Array
-        - [ ] Accessing
-        - [ ] Modifying
+    - [x] [Accessing and Modifying an Array](Elizabeth/TestR.swift#L220) <!-- append to collections -->
     - [ ] Iterating Over an Array
 - [ ] Set
     - [ ] Creating and Initializing an Empty Set
@@ -134,7 +132,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [x] [If](Elizabeth/TestR.swift#L123)
     - [ ] For-In
 - [x] Control Transfer Statements
-    - [x] [Continue](Elizabeth/SideBarView.swift#L34) <!--  continue SearchLoop -- >
+    - [x] [Continue](Elizabeth/SideBarView.swift#L34) <!--  continue SearchLoop -->
     - [x] [Break](Elizabeth/Utils2.swift#141) <!-- break if not error -->
     - [ ] Fallthrough
     - [x] [Labeled Statements](Elizabeth/SideBarView.swift#L25) <!-- SearchLoop -->
