@@ -100,7 +100,7 @@ typealias HTTPReponse = (
 func sendHttpRequest2(
     _ request: RequestData2,
     maxAttempts: Int = 3
-) async -> HTTPRequestResult {
+) async -> HTTPReponse {
     precondition(maxAttempts >= 1, "maxAttempts must be at least 1")
 
     func extractCookies(from headers: [String: String]) -> [String] {
