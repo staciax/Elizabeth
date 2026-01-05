@@ -16,6 +16,9 @@ func getDefaultUserAgent() -> String {
 
     return "\(appName)/\(versionString)"
 }
+
+// the basics: Type Aliases
+// the basics: Tuples
 typealias HTTPReponse = (
     data: String?,
     statusCode: Int?,
@@ -27,6 +30,8 @@ typealias HTTPReponse = (
     errorDescription: String?
 )
 
+// functions: Functions With Multiple Parameters
+// functions: Default Parameter Values
 func sendHttpRequest2(
     _ request: RequestData2,
     maxAttempts: Int = 3
@@ -40,6 +45,9 @@ func sendHttpRequest2(
     }
 
     var headers: HTTPHeaders = []
+    
+    // collection types: Dictionaries - Creating an Empty Dictionary
+    // collection types: Dictionaries - Creating an Empty Dictionary
     for (key, value) in request.headers ?? [:] {
         headers[key] = value
     }
@@ -69,7 +77,8 @@ func sendHttpRequest2(
         }
     }
 
-    let response = finalResponse! // force unwraping
+    // the basics: Force Unwrapping
+    let response = finalResponse! 
 
     debugPrint(response)
 
