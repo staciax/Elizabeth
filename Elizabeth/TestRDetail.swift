@@ -189,7 +189,7 @@ struct TestRDetail: View {
                     case .docs:
                         Text("Docs")
                     case .params:
-                        let bindingParams = Binding<[String: String]>(
+                        let paramsBinding = Binding<[String: String]>(
                             get: { data.params ?? [:] },
                             set: { newParams in
 //                                   print(newParams)
@@ -201,7 +201,7 @@ struct TestRDetail: View {
                             }
                         )
 
-                        let params = bindingParams.wrappedValue
+                        let params = paramsBinding.wrappedValue
                         
                         // closures: The Sorted Method
                         let _ = params.keys.sorted(by: sortedForward)
@@ -240,7 +240,7 @@ struct TestRDetail: View {
                             // for test
                             copyParams[newParamKey] = "test"
 
-                            bindingParams.wrappedValue = copyParams
+                            paramsBinding.wrappedValue = copyParams
                         }) {
                             Label("Add Param", systemImage: "plus")
                         }
@@ -304,7 +304,7 @@ struct TestRDetail: View {
 //                        }
                     case .headers:
                         VStack(alignment: .leading) {
-                            let bindingHeaders = Binding<[String: String]>(
+                            let headersBinding = Binding<[String: String]>(
                                 get: { data.headers ?? [:] },
                                 set: { newHeaders in
                                     print(newHeaders)
@@ -314,7 +314,7 @@ struct TestRDetail: View {
                                 }
                             )
 
-                            let headers = bindingHeaders.wrappedValue
+                            let headers = headersBinding.wrappedValue
                             
                             // closures: Inferring Type From Context
                             let _ = headers.keys.sorted(by: { s1, s2 in return s1 > s2 })
@@ -357,7 +357,7 @@ struct TestRDetail: View {
                                 // for test
                                 copyHeaders[newHeaderKey] = "test"
                                 
-                                bindingHeaders.wrappedValue = copyHeaders
+                                headersBinding.wrappedValue = copyHeaders
                             }) {
                                 Label("Add Header", systemImage: "plus")
                             }
@@ -380,7 +380,7 @@ struct TestRDetail: View {
                             Text("Currently dost not support.")
                                 .font(.body)
                         case .raw:
-                            let bindingBodyContent = Binding(
+                            let bodyContentBinding = Binding(
                                 get: { data.bodyContent ?? ""},
                                 set: { newBodyContent in
                                     var data = data
@@ -427,7 +427,7 @@ struct TestRDetail: View {
                             Text(" | ")
                             Text("\(fmtDuration)")
                             Text(" | ")
-                            Text("\(totalResponseSize)")
+                            Text("\(fmtResponseSize)")
                         }
 
                         TextEditor(text: .constant(response.data ?? ""))
