@@ -351,7 +351,19 @@ struct TestRDetail: View {
                                 get: { data.bodyContent ?? ""},
                                 set: { newBodyContent in
                                     var data = data
+                                    
+                                    // TODO: validate syntax if body content is json-object, json-array, etc.
+
+                                    // strings and characters: Comparing Strings - Prefix and Suffix Equality
+                                    //
+                                    let isJsonObject = newBodyContent.hasPrefix("{") && newBodyContent.hasSuffix("}")
+                                    print("body content is json object: \(isJsonObject)")
+                                    
+                                    let isJsonArray = newBodyContent.hasPrefix("[") && newBodyContent.hasSuffix("]")
+                                    print("body content is json array: \(isJsonArray)")
+                                    
                                     data.bodyContent = newBodyContent
+                            
                                     item = .request(id: id, name: name, description: description, data: data)
                                 }
                             )
