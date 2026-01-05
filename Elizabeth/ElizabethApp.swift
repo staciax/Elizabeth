@@ -10,10 +10,11 @@ import SwiftUI
 @main
 struct ElizabethApp: App {
     @State private var appState = AppState()
+    @State private var appState2 = AppState2()
 
     var body: some Scene {
         WindowGroup {
-            ContentView().environment(appState)
+            ContentView().environment(appState).environment(appState2)
         }
     }
 }
