@@ -71,8 +71,9 @@ func createRequest(
 
     var finalHeaders = getDefaultHeaders()
 
-    if let headers {
-        for (key, value) in headers {
+    // the basics: Optional - Nil
+    if  headers != nil {
+        for (key, value) in headers! {
             finalHeaders[key] = value
         }
     }
