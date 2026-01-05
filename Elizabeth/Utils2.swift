@@ -8,6 +8,14 @@
 import Alamofire
 import Foundation
 
+// https://stackoverflow.com/questions/25965239/how-do-i-get-the-app-version-and-build-number-using-swift
+// funtions: Functions Without Parameters
+func getDefaultUserAgent() -> String {
+    let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "Elizabeth"
+    let versionString = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"
+
+    return "\(appName)/\(versionString)"
+}
 typealias HTTPReponse = (
     data: String?,
     statusCode: Int?,
