@@ -77,7 +77,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 - [ ] Counting Characters
 - [x] Accessing and Modifying a String
     - [x] [String Indices](Elizabeth/TestRDetail.swift#L87) <!-- let lastIndex -->
-    - [x] [Inserting](Elizabeth/TestRDetail.swift#L104)  <!-- url insert -- >
+    - [x] [Inserting](Elizabeth/TestRDetail.swift#L104)  <!-- url insert -->
     - [ ] Removing
 - [x] [Substrings](Elizabeth/Utils2.swift#L404)
 - [x] Comparing Strings 
