@@ -286,18 +286,17 @@ func statusMessage(for statusCode: Int) -> String {
 
 // basic operators: Comparison Operators
 func isOK(_ code: Int) -> Bool {
-    return code == 200
+    code == 200
 }
 
 // basic operators:  Range Operators
 func isSuccess(code: Int) -> Bool {
-    let successRange = 200...299
-    return successRange.contains(code)
+    (200...299).contains(code)
 }
 
 // basic operators: Half-Open Range Operator
 func isClientError(code: Int) -> Bool {
-    return (400..<500).contains(code)
+    (400..<500).contains(code)
 }
 
 // basic operators: One-Sided Ranges
