@@ -277,7 +277,7 @@ struct TestRDetail: View {
 
                             Button(action: {
                                 var updated = headers
-                                updated["new-header-\(headers.count)"] = ""
+                                updated["New-Header-\(headers.count)"] = ""
                                 bindingHeaders.wrappedValue = updated
                             }) {
                                 Label("Add Header", systemImage: "plus")
