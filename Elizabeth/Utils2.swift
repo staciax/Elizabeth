@@ -322,6 +322,61 @@ func statusMessage(for statusCode: Int) -> String {
     return ""
 }
 
+
+func getEncodingDebug(_ text: String) -> String {
+    var result = ""
+    
+    // strings and characters: Unicode Representations of Strings
+
+    // utf-8
+
+    // basic operators: Compound Assignment Operators (+=)
+    result += "UTF-8: "
+    for byte in text.utf8 {
+        result += "\(byte) "
+    }
+    result += "\n\n"
+
+    // utf-16
+    result += "UTF-16: "
+    for codeUnit in text.utf16 {
+        result += "\(codeUnit) "
+    }
+    result += "\n\n"
+
+    // unicode scalars
+    result += "Scalars: "
+    for scalar in text.unicodeScalars {
+        result += "\(scalar.value) "
+    }
+    
+    return result
+}
+
+func formatBytes(_ bytes: Int) -> String {
+
+    // the basics: Integer and Floating-Point Conversion
+    let value = Double(bytes)
+    
+    guard value > 0 else { return "0 B" }
+    
+    let kb_size: Double = 1024
+    let mb_size: Double = kb_size * 1024
+    let gb_size: Double = mb_size * 1024
+    
+    switch value {
+    case ..<kb_size:
+        return "\(bytes) B"
+    case kb_size..<mb_size:
+        return String(format: "%.2f KB", value / kb_size)
+    case mb_size..<gb_size:
+        return String(format: "%.2f MB", value / mb_size)
+    default:
+        return String(format: "%.2f GB", value / gb_size)
+    }
+}
+// https://www.hackingwithswift.com/example-code/strings/how-to-specify-floating-point-precision-in-a-string
+
 // basic operators: Comparison Operators
 func isOK(_ code: Int) -> Bool {
     code == 200
