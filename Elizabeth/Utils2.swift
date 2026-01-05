@@ -284,3 +284,25 @@ func statusMessage(for statusCode: Int) -> String {
     return ""
 }
 
+// basic operators: Comparison Operators
+func isOK(_ code: Int) -> Bool {
+    return code == 200
+}
+
+// basic operators:  Range Operators
+func isSuccess(code: Int) -> Bool {
+    let successRange = 200...299
+    return successRange.contains(code)
+}
+
+// basic operators: Half-Open Range Operator
+func isClientError(code: Int) -> Bool {
+    return (400..<500).contains(code)
+}
+
+// basic operators: One-Sided Ranges
+func isServerError(code: Int) -> Bool {
+    // 500... หมายถึงตั้งแต่ 500 ไปจนถึง Int.max
+    return (500...).contains(code)
+}
+
