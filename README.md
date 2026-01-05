@@ -46,17 +46,17 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [ ] Unary Minus Operator
     - [ ] Unary Plus Operator
 - [ ] Compound Assignment Operators
-- [ ] Comparison Operators
+- [x] [Comparison Operators](Elizabeth/Utils2.swift#L289)
 - [x] [Ternary Conditional Operator](Elizabeth/TestR.swift#L89) <!-- headers: finalHeaders.isEmpty ? nil : finalHeaders -->
 - [x] [Nil-Coalescing Operator](Elizabeth/TestRDetail.swift#L301) <!-- statusCode -->
-- [ ] Range Operators
-    - [ ] Closed Range Operator
-    - [ ] Half-Open Range Operator
-    - [ ] One-Sided Ranges
-- [ ] Logical Operators
-    - [x] [Logical NOT Operator](Elizabeth/RequestDetailView.swift#192) <!-- !isFolder -->
-    - [ ] [Logical AND Operator](Elizabeth/CollectionView.swift#L240) 
-    - [ ] [Logical OR Operator](Elizabeth/CollectionView.swift#161) <!-- isCollection -->
+- [x] Range Operators
+    - [x] [Closed Range Operator](Elizabeth/Utils2.swift#L294)
+    - [x] [Half-Open Range Operator](Elizabeth/Utils2.swift#L300)
+    - [x] [One-Sided Ranges](Elizabeth/Utils2.swift#L305)
+- [x] Logical Operators
+    - [x] [Logical NOT Operator](Elizabeth/TestR.swift#L185) <!-- !self.isFocused -->
+    - [ ] Logical AND Operator
+    - [x] [Logical OR Operator](Elizabeth/TestRDetail.swift#L375) <!-- isCollection -->
 - [ ] Combining Logical Operators
 - [ ] Explicit Parentheses
 
@@ -67,7 +67,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [ ] Extended String Delimiters
 - [x] [Initializing an Empty String](Elizabeth/EnvironmentView.swift#L18)
 - [ ] String Mutability
-<!-- - [-] Strings Are Value Types -->
+- [-] Strings Are Value Types
 - [ ] Working with Characters
 - [ ] Concatenating Strings and Characters
 - [x] [String Interpolation](Elizabeth/RequestDetailView.swift#L356)
@@ -117,9 +117,9 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [ ] While
     - [ ] Repeat-While Loops
 - [x] Conditional Statements
-    - [ ] If
+    - [x] If
         - [ ] If Expression
-    - [ ] Switch
+    - [x] Switch
         - [ ] Switch Expression
         - [x] [Interval Matching](Elizabeth/Utils2.swift#L31) <!-- statusColor -->
         - [-] Tuples
@@ -141,7 +141,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 - [x] Function Parameters and Return Values
     - [x] [Functions Without Parameters](Elizabeth/Utils2.swift#L12) <!-- getDefaultUserAgent -->
     - [x] [Functions With Multiple Parameters](Elizabeth/Utils2.swift) <!-- sendHttpRequest2 -->
-    - [ ] Functions Without Return Values
+    - [x] [Functions Without Return Values](Elizabeth/TestR.swift#L122) <!-- deleteChild -->
     - [x] [Functions With Multiple Return Values](Elizabeth/Utils2.swift#L47) <!-- sendHttpRequest2 -->
     - [x] [Functions With an Implicit Return](Elizabeth/Utils2.swift#L29) <!-- getDefaultHeaders --> 
 - [x] Function Argument Labels and Parameter Names
@@ -173,7 +173,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 **Enumerations**
 - [x] [Enumeration Syntax](Elizabeth/Enums.swift) <!-- HTTPMethod -->
 - [x] [Matching Enumeration Values with a Switch Statement](Elizabeth/Utils2.swift#L12) <!-- getMethodColor -->
-- [x] [Iterating over Enumeration Cases](Elizabeth/TestRDetail.swift#L120)  <!-- HTTPMethod.allCases -->
+- [x] [Iterating over Enumeration Cases](Elizabeth/TestRDetailsw.swift#L120)  <!-- HTTPMethod.allCases -->
 - [x] [Associated Values](Elizabeth/TestR.swift#L40)
 - [x] [Raw Values](Elizabeth/Enums.swift)
     - [ ] Implicitly Assigned Raw Values
