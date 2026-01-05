@@ -158,9 +158,9 @@ struct TestRDetail: View {
                             )
                         }
                     )
-
+                    
                     Text(name)
-
+                    
                     HStack {
                         Picker("", selection: methodBinding) {
                             ForEach(HTTPMethod.allCases) { method in
@@ -426,7 +426,7 @@ struct TestRDetail: View {
                         // basic operators: Arithmetic Operators - Addition Operator
                         let totalResponseSize = response.bodySizeBytes + response.headerSizeBytes
                         let fmtResponseSize = formatBytes(Int(totalResponseSize))
-
+                        
                         Button(action: {}) {
                             Text("\(statusCode) \(statusMessage)").foregroundStyle(statusColor(for: statusCode))
                             Text(" | ")
@@ -481,17 +481,18 @@ struct TestRDetail: View {
                         // if isLoading { return }
                         
                         // control flow: Deferred Actions
-                        defer { isLoading = false }
-                        defer { currentTab = .response }
+                        
                         defer {
                             if let response, let data = response.data {
                                 print(getEncodingDebug(data))
                             }
                         }
+                        defer { isLoading = false }
+                        // defer ให้ทำทีหลัง
 
                         // สลับหน้าไปยังหน้า response
                         currentTab = .response
-
+                        
                         // set loading เป็น true เพื่อปิดใช้งานปุ่ม
                         isLoading = true
                         
