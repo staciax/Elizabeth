@@ -197,6 +197,14 @@ func buildParams(_ params: (String, String)...) -> [String: String] {
     return result
 }
 
+// functions: Functions With an Implicit Return
+func getDefaultHeaders() -> [String: String] {
+    buildHeaders(
+        ("User-Agent", getDefaultUserAgent()),
+        ("Accept", "*/*")
+    )
+}
+
 // source: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
 let httpStatus: [Int: String] = [
     // 2xx Informational responses
