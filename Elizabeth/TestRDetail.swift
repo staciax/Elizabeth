@@ -246,7 +246,18 @@ struct TestRDetail: View {
                             )
 
                             let headers = bindingHeaders.wrappedValue
-                            let headerKeys = headers.keys.sorted()
+                            
+                            // closures: Inferring Type From Context
+                            let _ = headers.keys.sorted(by: { s1, s2 in return s1 > s2 })
+                            
+                            // closures: Implicit Returns from Single-Expression Closures
+                            let _ = headers.keys.sorted(by: { s1, s2 in s1 > s2 })
+                            
+                            // closures: Shorthand Argument Names
+                            let _ = headers.keys.sorted(by: { $0 > $1 } )
+                            
+                            // closures: Operator Methods
+                            let headerSortedKeys = headers.keys.sorted(by: > )
 
                             HStack {
                                 Text("Key").bold()
@@ -255,7 +266,7 @@ struct TestRDetail: View {
                                 Spacer()
                             }.padding(.vertical, 4)
 
-                            List(headerKeys, id: \.self) { key in
+                            List(headerSortedKeys, id: \.self) { key in
                                 HStack {
                                     TextField("Key", text: .constant(key))
                                     Spacer()
