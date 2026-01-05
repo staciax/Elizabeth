@@ -401,7 +401,7 @@ struct TestRDetail: View {
                                 }
                             )
                             
-                            TextEditor(text: bindingBodyContent)
+                            TextEditor(text: bodyContentBinding)
                                 .background(Color(white: 0.1))
                                 .foregroundColor(Color(white: 0.9))
                                 .scrollContentBackground(.hidden)
