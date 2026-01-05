@@ -400,3 +400,12 @@ func isServerError(code: Int) -> Bool {
     (500...).contains(code)
 }
 
+// strings and characters: Substrings
+func getSchemeFromUrl(_ url: String) -> String {
+   if let range = url.range(of: "://") {
+       let schemeSubstring = url[..<range.lowerBound]
+       return String(schemeSubstring)
+   }
+   return ""
+}
+
