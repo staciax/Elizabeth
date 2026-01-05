@@ -182,6 +182,7 @@ func sendHttpRequest2(
 
 // functions: Variadic Parameters
 func buildHeaders(_ headers: (String, String)...) -> [String: String] {
+    // collection types: Dictionaries - Dictionary Type Shorthand Syntax
     var result: [String: String] = [:]
     for (key, value) in headers { result[key] = value
     }
@@ -198,11 +199,16 @@ func buildParams(_ params: (String, String)...) -> [String: String] {
 }
 
 // functions: Functions With an Implicit Return
+// collection types: Dictionaries - Creating a Dictionary with a Dictionary Literal
 func getDefaultHeaders() -> [String: String] {
-    buildHeaders(
-        ("User-Agent", getDefaultUserAgent()),
-        ("Accept", "*/*")
-    )
+    [
+        "User-Agent": getDefaultUserAgent(),
+        "Accept": "*/*"
+    ]
+    // buildHeaders(
+    //     ("User-Agent", getDefaultUserAgent()),
+    //     ("Accept", "*/*")
+    // )
 }
 
 // source: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
@@ -278,6 +284,7 @@ let httpStatus: [Int: String] = [
 ]
 
 func statusMessage(for statusCode: Int) -> String {
+    // the basics: Optional - Optional Binding
     if let name = httpStatus[statusCode] {
         return name
     }
@@ -301,7 +308,6 @@ func isClientError(code: Int) -> Bool {
 
 // basic operators: One-Sided Ranges
 func isServerError(code: Int) -> Bool {
-    // 500... หมายถึงตั้งแต่ 500 ไปจนถึง Int.max
-    return (500...).contains(code)
+    (500...).contains(code)
 }
 
