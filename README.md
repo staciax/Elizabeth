@@ -187,6 +187,8 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 - [x] [Recursive Enumerations](Elizabeth/TestR.swift#L40)
 
 ## Links
+- https://docs.swift.org/swift-book/documentation/the-swift-programming-language/
 - https://developer.apple.com/documentation/SwiftUI/Migrating-from-the-observable-object-protocol-to-the-observable-macro
 - https://developer.apple.com/documentation/swiftui/environment
 - https://developer.apple.com/documentation/SwiftUI/Applying-Liquid-Glass-to-custom-views
+- https://developer.apple.com/documentation/swiftui/progressview
