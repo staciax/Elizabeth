@@ -14,6 +14,7 @@ import SwiftUI
     var collections: [CollectionItem] = []
 
     init() {
+        // collection types: Array - Appending an Array
         collections.append(contentsOf: [
             .collection(
                 id: UUID(),
