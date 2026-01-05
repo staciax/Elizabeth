@@ -9,6 +9,8 @@ import Observation
 import SwiftUI
 
 @Observable class AppState2 {
+    // collection types: Array - Array Type Shorthand Syntax
+    // collection types: Array - Creating an Empty Array
     var collections: [CollectionItem] = []
 
     init() {
