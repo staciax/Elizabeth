@@ -243,6 +243,8 @@ func getDefaultHeaders() -> [String: String] {
 }
 
 // source: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
+
+// the basics: Integers - Int
 let httpStatus: [Int: String] = [
     // 2xx Informational responses
     100: "Continue",
