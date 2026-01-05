@@ -121,12 +121,29 @@ func sendHttpRequest2(
     var duration: TimeInterval = 0
 
     for attempt in 1 ... maxAttempts {
-        let task = AF.request(
-            request.url,
+        
+        let task: DataTask<String>
+        
+        if let bodyContent = request.bodyContent {
+            
+            // thank: https://stackoverflow.com/questions/27855319/post-request-with-a-simple-string-in-body-with-alamofire
+            var urlRequest = try! URLRequest(
+                url: request.url,
             method: .init(rawValue: request.method.rawValue.uppercased()),
             headers: headers
         )
+            urlRequest.httpBody = Data(bodyContent.utf8)
+            task = AF.request(urlRequest)
+                    .serializingString()
+        } else {
+             task = AF.request(
+                request.url,
+                method: .init(rawValue: request.method.rawValue.uppercased()),
+                headers: headers,
+                
+            )
         .serializingString() // .serializingData()
+        }
 
         let startTime = CFAbsoluteTimeGetCurrent()
         let response = await task.response
