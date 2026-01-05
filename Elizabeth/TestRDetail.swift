@@ -409,6 +409,11 @@ struct TestRDetail: View {
                         }
                     }
 
+                } else if isLoading {
+                    Spacer()
+                    HStack(alignment: .center) {
+                        ProgressView().frame(maxWidth: .infinity)
+                    }
                 } else {
                     if let response {
                         // the basics: Providing a Fallback Value
@@ -484,9 +489,12 @@ struct TestRDetail: View {
                             }
                         }
 
-                        // set loading เป็น true เพื่อปิดใช้งานปุ่ม
+                        // สลับหน้าไปยังหน้า response
+                        currentTab = .response
 
+                        // set loading เป็น true เพื่อปิดใช้งานปุ่ม
                         isLoading = true
+                        
 
                         // ทำการ http request
                         response = await sendHttpRequest2(requestData)
