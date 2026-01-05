@@ -25,7 +25,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 - [x] [Booleans](Elizabeth/TestRDetail.swift#L46) <!-- isLoading -->
 - [x] [Tuples](Elizabeth/Utils2.swift#87) <!-- HTTPReponse -->
 - [x] Optionals
-    - [ ] Nil
+    - [x] [Nil](Elizabeth/TestR.swift#74) <!-- headers != nil -->
     - [x] [Optional Binding](Elizabeth/Utils2.swift#263) <!-- statusMessage -->
     - [x] [Providing a Fallback Value](Elizabeth/TestRDetail.swift#L301) <!-- statusCode -->
     - [x] [Force Unwrapping](Elizabeth/Utils2.swift#L131) <!--  finalResponse! -->
@@ -79,7 +79,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [x] [String Indices](Elizabeth/TestRDetail.swift#L87) <!-- let lastIndex -->
     - [x] [Inserting](Elizabeth/TestRDetail.swift#L104)  <!-- url insert -- >
     - [ ] Removing
-- [ ] Substrings
+- [x] [Substrings](Elizabeth/Utils2.swift#L404)
 - [x] Comparing Strings 
     - [x] [String and Character Equality](Elizabeth/Utils2.swift#L111) <!-- $0.key.lowercased() == "set-cookie" -->
     - [x] [Prefix and Suffix Equality](Elizabeth/TestRDetail.swift#L404) <!-- .hasPrefix("{") && .hasSuffix("}") -->
@@ -123,9 +123,9 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [x] [While](Elizabeth/TestRDetail.swift#L54) <!-- normalizeURL -->
     - [ ] Repeat-While Loops
 - [x] Conditional Statements
-    - [x] If
+    - [x] [If](Elizabeth/TestRDetail.swift#L58)
         - [ ] If Expression
-    - [x] Switch
+    - [x] [Switch](Elizabeth/Utils2.swift#L15)
         - [ ] Switch Expression
         - [x] [Interval Matching](Elizabeth/Utils2.swift#L31) <!-- statusColor -->
         - [-] Tuples
@@ -133,11 +133,11 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
 - [x] Patterns
     - [x] [If](Elizabeth/TestR.swift#L123)
     - [ ] For-In
-- [ ] Control Transfer Statements
-    - [ ] Continue
+- [x] Control Transfer Statements
+    - [x] [Continue](Elizabeth/SideBarView.swift#L34) <!--  continue SearchLoop -- >
     - [x] [Break](Elizabeth/Utils2.swift#141) <!-- break if not error -->
     - [ ] Fallthrough
-    - [ ] Labeled Statements
+    - [x] [Labeled Statements](Elizabeth/SideBarView.swift#L25) <!-- SearchLoop -->
 - [x] [Early Exit](Elizabeth/Utils2.swift#L51) <!-- guard statement -->
 - [x] [Deferred Actions](Elizabeth/TestRDetail.swift#L335)
 - [x] [Checking API Availability](Elizabeth/TestR.swift#L311)
@@ -170,7 +170,7 @@ Elizabeth is an API testing tool written in Swift and SwiftUI.
     - [x] [Implicit Returns from Single-Expression Closures](Elizabeth/TestRDetail.swift#L260)
     - [x] [Shorthand Argument Names](Elizabeth/TestRDetail.swift#L264)
     - [x] [Operator Methods](Elizabeth/TestRDetail.swift#L268)
-- [ ] Trailing Closures
+- [x] [Trailing Closures](Elizabeth/Utils2.swift#L112)
 - [ ] Capturing Values
 - [ ] Closures Are Reference Types
 - [ ] Escaping Closures
