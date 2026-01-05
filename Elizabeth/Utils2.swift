@@ -119,7 +119,7 @@ func sendHttpRequest2(
     for (key, value) in request.headers ?? [:] {
         headers[key] = value
     }
-
+    
     var finalResponse: DataResponse<String, AFError>?
     var duration: TimeInterval = 0
 
@@ -132,9 +132,9 @@ func sendHttpRequest2(
             // thank: https://stackoverflow.com/questions/27855319/post-request-with-a-simple-string-in-body-with-alamofire
             var urlRequest = try! URLRequest(
                 url: request.url,
-            method: .init(rawValue: request.method.rawValue.uppercased()),
-            headers: headers
-        )
+                method: .init(rawValue: request.method.rawValue.uppercased()),
+                headers: headers
+            )
             urlRequest.httpBody = Data(bodyContent.utf8)
             task = AF.request(urlRequest)
                     .serializingString()
@@ -145,7 +145,7 @@ func sendHttpRequest2(
                 headers: headers,
                 
             )
-        .serializingString() // .serializingData()
+            .serializingString() // .serializingData()
         }
 
         let startTime = CFAbsoluteTimeGetCurrent()
@@ -163,7 +163,7 @@ func sendHttpRequest2(
     }
 
     // the basics: Force Unwrapping
-    let response = finalResponse! 
+    let response = finalResponse!
     
     // metrics
     var headerBytes: Int64 = 0
