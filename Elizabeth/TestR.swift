@@ -125,6 +125,7 @@ func addCollection(
 func deleteChild(at index: Int, from item: inout CollectionItem) {
     // control flow: Patterns
     if case .collection(let id, let name, let description, var children) = item {
+        // collection types: Array - Accessing and Modifying an Array
         children.remove(at: index)
         item = .collection(id: id, name: name, description: description, children: children)
     }
@@ -202,6 +203,8 @@ struct CollectionItemView2: View {
                             isExpanded = true
                             let newRequest = addRequest()
                             selectedId = newRequest.id
+
+                            // collection types: Array - Accessing and Modifying an Array
                             childrenBinding.wrappedValue.append(newRequest.item)
                         }) {
                             Label("", systemImage: "plus").labelStyle(.iconOnly)
@@ -214,12 +217,16 @@ struct CollectionItemView2: View {
                                 isExpanded = true
                                 let newRequest = addRequest()
                                 selectedId = newRequest.id
+
+                                // collection types: Array - Accessing and Modifying an Array
                                 childrenBinding.wrappedValue.append(newRequest.item)
                             }
                             Button("Add Collection") {
                                 isExpanded = true
                                 let newCollection = addCollection()
                                 selectedId = newCollection.id
+
+                                // collection types: Array - Accessing and Modifying an Array
                                 childrenBinding.wrappedValue.append(newCollection.item)
                             }
                             Divider()
@@ -345,6 +352,7 @@ struct TestRView: View {
                         item: $bindableAppState.collections[index],
                         selectedId: $selectedId,
                         onDelete: {
+                            // collection types: Array - Accessing and Modifying an Array
                             bindableAppState.collections.remove(at: index)
                         }
                     )
