@@ -20,23 +20,27 @@ func getCollectionItemId(_ item: CollectionItem) -> UUID {
         return id
     }
 }
-
+// enumerations: Recursive Enumerations
 func findBinding(for targetId: UUID, in items: Binding<[CollectionItem]>) -> Binding<CollectionItem>? {
-    for index in items.wrappedValue.indices {
+    SearchLoop: for index in items.wrappedValue.indices {
         let currentItem = items.wrappedValue[index]
 
         if getCollectionItemId(currentItem) == targetId {
             return items[index]
         }
 
-        if case .collection(let id, let name, let desc, let children) = currentItem {
+        // control flow: Patterns, Early Return, Continue
+        guard case .collection(let id, let name, let description, let children) = currentItem else {
+            continue SearchLoop
+        }
+
             let childrenBinding = Binding(
                 get: { children },
                 set: { newChildren in
                     items.wrappedValue[index] = .collection(
                         id: id,
                         name: name,
-                        description: desc,
+                    description: description,
                         children: newChildren
                     )
                 }
@@ -45,7 +49,7 @@ func findBinding(for targetId: UUID, in items: Binding<[CollectionItem]>) -> Bin
             if let found = findBinding(for: targetId, in: childrenBinding) {
                 return found
             }
-        }
+       
     }
 
     return nil
