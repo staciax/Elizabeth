@@ -68,7 +68,14 @@ func createRequest(
 ) -> (item: CollectionItem, id: UUID) {
     let id = UUID()
 
-    var finalHeaders = headers ?? [:]
+    var finalHeaders = getDefaultHeaders()
+
+    if let headers {
+        for (key, value) in headers {
+            finalHeaders[key] = value
+        }
+    }
+
     if let authHeaders = getAuthHeaders(from: auth) {
         for (key, value) in authHeaders {
             finalHeaders[key] = value
@@ -113,6 +120,7 @@ func createCollection(
 }
 
 func deleteChild(at index: Int, from item: inout CollectionItem) {
+    // control flow: Patterns
     if case .collection(let id, let name, let description, var children) = item {
         children.remove(at: index)
         item = .collection(id: id, name: name, description: description, children: children)
@@ -302,14 +310,25 @@ struct TestRView: View {
 
         VStack(alignment: .leading) {
             HStack {
-                Button(action: {
-                    let newCollection = createCollection()
-                    self.selectedId = newCollection.id
-                    bindableAppState.collections.append(newCollection.item)
-                }) {
-                    Label("", systemImage: "plus")
-                        .labelStyle(.iconOnly)
+                let createNewCollection: () -> Void = {
+                    // the basics: Semicolons
+                    let newCollection = createCollection(); self.selectedId = newCollection.id; bindableAppState.collections.append(newCollection.item)
                 }
+                
+                // control flow: Checking API Availability
+                if #available(macOS 26.0, *) { // 'glassEffect(_:in:)' is only available in macOS 26.0 or newer
+                    Button(action: { createNewCollection() }) {
+                        Label("", systemImage: "plus")
+                            .labelStyle(.iconOnly)
+                    }
+                    .glassEffect(.regular, in: .circle)
+                } else {
+                    Button(action: { createNewCollection() }) {
+                        Label("", systemImage: "plus")
+                            .labelStyle(.iconOnly)
+                    }
+                }
+
                 Text("New Collection")
             }
             .padding(.top, 10)
