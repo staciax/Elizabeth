@@ -108,6 +108,7 @@ func sendHttpRequest2(
     func extractCookies(from headers: [String: String]) -> [String] {
         return headers
             // strings and characters: Comparing Strings - String and Character Equality
+            // closures: Trailing Closures
             .filter { $0.key.lowercased() == "set-cookie" }
             .map { $0.value }
     }
