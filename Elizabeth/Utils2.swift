@@ -183,20 +183,29 @@ func sendHttpRequest2(
 
     // response headers
     var responseHeaders: [String: String] = [:]
-    if let all = response.response?.allHeaderFields {
-        for (key, value) in all {
+    
+    if let httpResponse = response.response {
+        for (key, value) in httpResponse.allHeaderFields {
             responseHeaders[String(describing: key)] = String(describing: value)
         }
     }
 
     // request headers
-    let requestHeaders = response.request?.allHTTPHeaderFields ?? [:]
+    var requestHeaders: [String: String] = [:]
+    if let httpRequest = response.request, let allHeaders = httpRequest.allHTTPHeaderFields {
+        for (key, value) in allHeaders {
+            requestHeaders[key] = value
+        }
+    }
 
     // cookies
     let cookies: [String] = extractCookies(from: responseHeaders)
 
     // error
-    let errorDescription = response.error?.localizedDescription
+    var errorDescription: String?
+    if let error = response.error {
+        errorDescription = error.localizedDescription
+    }
 
     return (
         statusCode: statusCode,
