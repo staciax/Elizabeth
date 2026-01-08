@@ -131,7 +131,7 @@ func deleteChild(at index: Int, from item: inout CollectionItem) {
     }
 }
 
-struct CollectionItemView2: View {
+struct CollectionItemView: View {
     @Binding var item: CollectionItem
     @Binding var selectedId: UUID?
 
@@ -169,7 +169,7 @@ struct CollectionItemView2: View {
                 ForEach(childrenBinding.indices, id: \.self) { index in
 
                     // enumerations: Recursive Enumerations
-                    CollectionItemView2(
+                    CollectionItemView(
                         item: childrenBinding[index],
                         selectedId: $selectedId,
                         onDelete: {
@@ -352,7 +352,7 @@ struct TestRView: View {
 
             List(selection: $selectedId) {
                 ForEach($bindableAppState.collections.indices, id: \.self) { index in
-                    CollectionItemView2(
+                    CollectionItemView(
                         item: $bindableAppState.collections[index],
                         selectedId: $selectedId,
                         onDelete: {
