@@ -1,5 +1,5 @@
 //
-//  TestRDetail.swift
+//  CollectionDetailView.swift
 //  Elizabeth
 //
 //  Created by STACiA on 5/1/2569 BE.
@@ -76,7 +76,7 @@ func normalizeURL(_ inputUrl: String) -> String {
     return url
 }
 
-struct TestRDetail: View {
+struct CollectionDetailView: View {
     @Binding var item: CollectionItem
 
     // state สำหรับสลับหน้า request กับ response
@@ -550,5 +550,5 @@ struct TestRDetail: View {
             )
         )]
     )
-    TestRDetail(item: $item)
+    CollectionDetailView(item: $item)
 }

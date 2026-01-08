@@ -100,7 +100,7 @@ struct SidebarView: View {
             switch selectedSideBar {
             case .collections:
                 if let selectedId, let itemBinding = findBinding(for: selectedId, in: $bindableAppState.collections) {
-                    TestRDetail(item: itemBinding)
+                    CollectionDetailView(item: itemBinding)
 //                        .id(selectedId)
                 } else {
                     ContentUnavailableView(
