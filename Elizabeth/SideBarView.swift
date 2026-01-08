@@ -89,7 +89,7 @@ struct SidebarView: View {
 //            }
 
             ZStack {
-                TestRView(selectedId: $selectedId)
+                CollectionView(selectedId: $selectedId)
                     .opacity(selectedSideBar == .collections ? 1 : 0)
 
                 EnvironmentView2()

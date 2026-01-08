@@ -1,5 +1,5 @@
 //
-//  TestR.swift
+//  CollectionView.swift
 //  Elizabeth
 //
 //  Created by STACiA on 4/1/2569 BE.
@@ -315,7 +315,7 @@ struct CollectionItemView: View {
     }
 }
 
-struct TestRView: View {
+struct CollectionView: View {
     @Environment(AppState.self) var appState
 
     @Binding var selectedId: UUID?
@@ -370,5 +370,5 @@ struct TestRView: View {
 #Preview {
     @Previewable @State var selectedId: UUID?
     @Previewable @State var appState = AppState()
-    TestRView(selectedId: $selectedId).environment(appState)
+    CollectionView(selectedId: $selectedId).environment(appState)
 }
