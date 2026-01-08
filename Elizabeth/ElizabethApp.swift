@@ -14,7 +14,9 @@ struct ElizabethApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView().environment(appState).environment(appState2)
+            ContentView()
+                .environment(appState)
+                .environment(appState2)
         }
     }
 }
