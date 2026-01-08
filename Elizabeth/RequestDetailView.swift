@@ -20,36 +20,58 @@ typealias HTTPRequestResult = (
 )
 
 // TODO: attempt request for 3 time?
-func sendHttpRequest(_ request: RequestData) async -> HTTPRequestResult {
+func sendHttpRequest(
+    _ request: RequestData,
+    maxAttempts: Int = 3
+) async -> HTTPRequestResult {
+    precondition(maxAttempts >= 1, "maxAttempts must be at least 1")
+
+    func extractCookies(from headers: [String: String]) -> [String] {
+        return headers
+            .filter { $0.key.lowercased() == "set-cookie" }
+            .map { $0.value }
+    }
+
     let headers: HTTPHeaders = [
         "Accept": "application/json",
     ]
 
-    let startTime = CFAbsoluteTimeGetCurrent()
+    var finalResponse: DataResponse<String, AFError>?
+    var duration: TimeInterval = 0
 
-    let task = AF.request(
-        request.url,
-        method: .init(rawValue: request.method.rawValue.uppercased()),
-        headers: headers
-    )
-    .serializingString() // .serializingData()
+    for attempt in 1 ... maxAttempts {
+        let task = AF.request(
+            request.url,
+            method: .init(rawValue: request.method.rawValue.uppercased()),
+            headers: headers
+        )
+        .serializingString() // .serializingData()
 
-    let endTime = CFAbsoluteTimeGetCurrent()
-    let duration = endTime - startTime
+        let startTime = CFAbsoluteTimeGetCurrent()
+        let response = await task.response
+        let endTime = CFAbsoluteTimeGetCurrent()
 
-    let response = await task.response
+        duration = endTime - startTime
+        finalResponse = response
+
+        if let error = response.error {
+            print("Attempt \(attempt) failed: \(error.localizedDescription)")
+        } else {
+            break
+        }
+    }
+
+    let response = finalResponse! // force unwraping
 
     debugPrint(response)
 
-    let httpResponse = response.response
-
     let data = response.value
-    let statusCode = httpResponse?.statusCode
-    let finalURL = httpResponse?.url
+    let statusCode = response.response?.statusCode
+    let finalURL = response.response?.url
 
     // response headers
     var responseHeaders: [String: String] = [:]
-    if let all = httpResponse?.allHeaderFields {
+    if let all = response.response?.allHeaderFields {
         for (key, value) in all {
             responseHeaders[String(describing: key)] = String(describing: value)
         }
@@ -58,10 +80,8 @@ func sendHttpRequest(_ request: RequestData) async -> HTTPRequestResult {
     // request headers
     let requestHeaders = response.request?.allHTTPHeaderFields ?? [:]
 
-    // cookie
-    let cookies: [String] = responseHeaders
-        .filter { $0.key.lowercased() == "set-cookie" }
-        .map { $0.value }
+    // cookies
+    let cookies: [String] = extractCookies(from: responseHeaders)
 
     // error
     let errorDescription = response.error?.localizedDescription
@@ -105,11 +125,11 @@ enum AuthType: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
-enum BodyType: String, CaseIterable, Identifiable {
-    case formData = "FormData"
-    case raw = "Raw"
-    var id: Self { self }
-}
+//enum BodyType: String, CaseIterable, Identifiable {
+//    case formData = "FormData"
+//    case raw = "Raw"
+//    var id: Self { self }
+//}
 
 struct Param: Identifiable {
     var key: String
@@ -123,7 +143,25 @@ struct Header: Identifiable {
     var id: String { key }
 }
 
+//    @State private var params = [
+//        Param(key: "test key", value: "test value"),
+//        Param(key: "test key 2", value: "test value"),
+//        Param(key: "test key 3", value: "test value"),
+//        Param(key: "test key 4", value: "test value"),
+//        Param(key: "test key 5", value: "test value"),
+//    ]
 
+// typealias RequestDataTuple = (
+//    id: UUID,
+//    method: HTTPMethod,
+//    url: String,
+//    headers: [String: String]?,
+//    bodyContent: String?,
+//    params: [String: String]?,
+//    requestHeaders: [String: String]?,
+//    basicAuth: (username: String, password: String)?,
+//    oauth: (token: String, prefix: String)?
+// )
 
 struct RequestDetailView: View {
     @Binding var request: RequestItem
@@ -138,6 +176,10 @@ struct RequestDetailView: View {
     @State private var selectedBodyType: BodyType = .formData
     @State private var bodyRaw: String = ""
 
+    // params
+    @State private var params: [String:String] = ["key": "value"]
+    @State private var newParamName: String = ""
+
     // auth basic
     @State private var username: String = ""
     @State private var password: String = ""
@@ -146,14 +188,11 @@ struct RequestDetailView: View {
     @State private var oauthToken: String = ""
     @State private var oauthPrefix: String = "Bearer"
 
+    // alert dialog
+    @State private var showingAlert = false
+
     // test
-    @State private var params = [
-        Param(key: "test key", value: "test value"),
-        Param(key: "test key 2", value: "test value"),
-        Param(key: "test key 3", value: "test value"),
-        Param(key: "test key 4", value: "test value"),
-        Param(key: "test key 5", value: "test value"),
-    ]
+
     @State private var headers = [
         Header(key: "test key", value: "test value"),
         Header(key: "test key 2", value: "test value"),
@@ -167,23 +206,56 @@ struct RequestDetailView: View {
     var body: some View {
         let isFolder = (request.children != nil || request.data == nil)
 
+//        if !username.isEmpty && !password.isEmpty {
+//            if let data = request.data {
+//                data.basicAuth = (username: username, password: password)
+//            }
+//        }
+
         VStack(alignment: .leading) {
             if !isFolder {
                 if selectedPanel == .request {
                     Text(request.name)
                     HStack {
-                        Picker("", selection: makeMethodBinding()) {
+                        Picker("", selection: Binding(
+                            get: {
+                                if let data = request.data {
+                                    return data.method
+                                }
+                                return HTTPMethod.get
+                            },
+                            set: { newValue in
+                                if var data = request.data {
+                                    data.method = newValue
+                                    request.data = data
+                                }
+                            }
+                        )) {
                             ForEach(HTTPMethod.allCases) { method in
                                 Text(method.rawValue.uppercased())
                             }
                         }
                         .labelsHidden()
                         .fixedSize()
-                        TextField("Enter URL", text: makeUrlBinding())
-                            .textFieldStyle(.roundedBorder)
+                        TextField("Enter URL", text: Binding(
+                            get: {
+                                if let data = request.data {
+                                    return buildUrl(data.url, parameters: params)
+                                }
+                                return ""
+//
+                            },
+                            set: { newValue in
+                                if var data = request.data {
+                                    data.url = newValue
+                                    request.data = data
+                                }
+                            }
+                        ))
+                        .textFieldStyle(.roundedBorder)
                     }
 
-                    Picker("Pane", selection: $selectedPane) {
+                    Picker("", selection: $selectedPane) {
                         ForEach(PanePanel.allCases) { pane in
                             Text(pane.rawValue.capitalized)
                         }
@@ -211,23 +283,43 @@ struct RequestDetailView: View {
                                 Text("Value")
                                 Spacer()
                             }
-                            List($params) { $param in
-                                HStack(spacing: 2) {
-                                    TextField("", text: $param.key)
-                                    Spacer()
-                                    TextField("", text: $param.value)
+                            List {
+                                ForEach(params.keys.sorted(), id: \.self) { key in
+                                    HStack(spacing: 2) {
+                                        TextField("", text: .constant(key))
+                                            .textFieldStyle(.roundedBorder)
+                                        Spacer()
+                                        TextField("", text: Binding(
+                                            get: { params[key]! },
+                                            set: { newValue in
+                                                params[key] = newValue
+                                            }
+                                        ))
+                                        .textFieldStyle(.roundedBorder)
+                                    }
+                                }
+                                Button {
+                                    showingAlert.toggle()
+                                } label: {
+                                    Label("Add param", systemImage: "plus")
+                                }
+                                .alert("New Parameter", isPresented: $showingAlert) {
+                                    TextField("Parameter name", text: $newParamName)
+
+                                    Button("Add") {
+                                        guard !newParamName.isEmpty, params[newParamName] == nil else { return }
+                                        params[newParamName] = ""
+                                        newParamName = ""
+                                    }
+
+                                    Button("Cancel", role: .cancel) {
+                                        newParamName = ""
+                                    }
+                                } message: {
+                                    Text("Enter the name for the new parameter")
                                 }
                             }
                         }
-                    //                    Table(params) {
-                    //                        TableColumn("Key", value: \.key)
-                    //                        TableColumn("Value", value: \.value)
-                    //                    }
-                    //                    Table(params) {
-                    ////                        TableColumn("Key", value: \.key)
-                    ////                        TableColumn("Value", value: \.value)
-                    //                    }
-                    //                      // TODO: table
                     case .auth:
                         VStack(alignment: .leading) {
                             HStack {
@@ -308,6 +400,8 @@ struct RequestDetailView: View {
                                 .pickerStyle(.segmented)
                             }
                             switch selectedBodyType {
+                            case .none:
+                                Text("None")
                             case .formData:
                                 Text("Text for form data")
                             case .raw:
@@ -323,7 +417,9 @@ struct RequestDetailView: View {
                     }
                 } else {
                     if response != nil {
-                        Button(action: {}) {
+                        Button(action: {
+                            showingAlert.toggle()
+                        }) {
                             let statusCode = response?.statusCode ?? 200
                             let statusMessage = statusMessage(for: statusCode).uppercased()
                             let duration = response?.duration ?? 0.0
@@ -334,10 +430,20 @@ struct RequestDetailView: View {
                             Text(" | ")
                             Text("\(fmtDuration)")
                         }
+//                        .sheet(isPresented: $showingHttpResponseInfoDialog) {
+//                            ScrollView {
+//                                VStack(alignment: .leading) {
+//                                    if let resposneHeaders = response?.responseHeaders {
+//
+//                                    }
+//                                }
+//                                .padding()
+//                            }
+//                            .frame(minWidth: 700, minHeight: 500)
+//                        }
 
                         TextEditingView(content: response?.data ?? "")
                             .padding(.vertical, 4)
-                        Spacer()
                     }
                 }
 
@@ -380,28 +486,6 @@ struct RequestDetailView: View {
             }
         }
         .padding()
-    }
-
-    func makeMethodBinding() -> Binding<HTTPMethod> {
-        return Binding(
-            get: { request.data?.method ?? .get },
-            set: { newValue in
-                if request.data != nil {
-                    request.data!.method = newValue
-                }
-            }
-        )
-    }
-
-    func makeUrlBinding() -> Binding<String> {
-        return Binding(
-            get: { request.data?.url ?? "" },
-            set: { newValue in
-                if request.data != nil {
-                    request.data!.url = newValue
-                }
-            }
-        )
     }
 }
 

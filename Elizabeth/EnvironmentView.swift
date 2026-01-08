@@ -15,28 +15,27 @@ struct EnvironmentView2: View {
     @State private var hoveredEnvironment: String?
 
     // input
-    @State var envNameInput: String = ""
-    @State var showingAlert: Bool = false
+    @State var newEnvName: String = ""
+    @State var showingNewEnvAlert: Bool = false
 
     var body: some View {
         NavigationStack {
             HStack {
                 Button(action: {
-                    showingAlert.toggle()
+                    showingNewEnvAlert.toggle()
                 }) {
-                    Label("add-environment", systemImage: "plus")
-                        .labelStyle(.iconOnly)
+                    Label("", systemImage: "plus").labelStyle(.iconOnly)
                 }
-                .alert("New Environment", isPresented: $showingAlert) {
-                    TextField("Environment Name", text: $envNameInput)
+                .alert("New Environment", isPresented: $showingNewEnvAlert) {
+                    TextField("Environment Name", text: $newEnvName)
                     Button("OK") {
-                        appState.environments.append(envNameInput)
+                        appState.environments.append(newEnvName)
                         // reset input
-                        envNameInput = ""
-                    }.disabled(envNameInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        newEnvName = ""
+                    }.disabled(newEnvName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     Button("Cancel", role: .cancel) {
                         // reset input
-                        envNameInput = ""
+                        newEnvName = ""
                     }
                 }
                 message: {

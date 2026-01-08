@@ -5,12 +5,20 @@
 //  Created by STACiA on 2/1/2569 BE.
 //
 
+import Observation
 import SwiftUI
+
+typealias EnvironmentVariables = [String: String]
+typealias EnvironmentData = (name: String, variables: EnvironmentVariables)
 
 @Observable class AppState {
     // environments
     var selectedEnvironment: String = "No Environment"
     var environments: [String] = ["No Environment"]
+
+    // refactor
+    // environments 2
+    var environments2: [EnvironmentData] = []
 
     var collections: [RequestItem] = []
 

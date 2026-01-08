@@ -7,19 +7,48 @@
 
 import SwiftUI
 
-struct RequestData: Hashable {
+struct RequestData: Identifiable, Hashable {
+    var id = UUID()
+
     var method: HTTPMethod
     var url: String
     var headers: [String: String]?
     var bodyContent: String?
+
+    // params
+    var params: [String: String]?
+    var requestHeaders: [String: String]?
+
+    // auth
+    var basicAuth: (username: String, password: String)?
+    var oauth: (token: String, prefix: String)?
+
+    // Required for Hashable
+    static func == (lhs: RequestData, rhs: RequestData) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
-struct RequestItem: Identifiable, Hashable, Equatable {
+struct RequestItem: Identifiable, Hashable {
     let id: UUID
     var name: String
     var description: String?
     var data: RequestData?
     var children: [RequestItem]?
+
+    // Required for Hashable
+
+    static func == (lhs: RequestItem, rhs: RequestItem) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
 func addRequest(to item: inout RequestItem) -> RequestItem {
