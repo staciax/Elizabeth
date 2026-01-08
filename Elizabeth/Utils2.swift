@@ -256,7 +256,7 @@ func getDefaultHeaders() -> [String: String] {
 
 // the basics: Integers - Int
 let httpStatus: [Int: String] = [
-    // 2xx Informational responses
+    // 1xx Informational responses
     100: "Continue",
     101: "Switching Protocols",
     102: "Processing",
