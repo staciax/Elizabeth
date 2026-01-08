@@ -57,10 +57,7 @@ func findBinding(for targetId: UUID, in items: Binding<[CollectionItem]>) -> Bin
 
 struct SidebarView: View {
     @Environment(AppState.self) private var appState
-    @Environment(AppState2.self) private var appState2
-
     @State var selectedSideBar: SideBarItem = .collections
-    @State var selectionRequest: RequestItem?
 
     // state
     @State private var selectedId: UUID?
@@ -70,7 +67,6 @@ struct SidebarView: View {
 
     var body: some View {
         @Bindable var bindableAppState = appState
-        @Bindable var bindableAppState2 = appState2
 
         NavigationSplitView(columnVisibility: $visibility) {
             List(selection: $selectedSideBar) {
@@ -103,7 +99,7 @@ struct SidebarView: View {
             // TODO: use ZStack for persistant view
             switch selectedSideBar {
             case .collections:
-                if let selectedId, let itemBinding = findBinding(for: selectedId, in: $bindableAppState2.collections) {
+                if let selectedId, let itemBinding = findBinding(for: selectedId, in: $bindableAppState.collections) {
                     TestRDetail(item: itemBinding)
 //                        .id(selectedId)
                 } else {
@@ -132,6 +128,5 @@ struct SidebarView: View {
 
 #Preview {
     @Previewable @State var appState = AppState()
-    @Previewable @State var appState2 = AppState2()
-    SidebarView().environment(appState).environment(appState2)
+    SidebarView().environment(appState)
 }

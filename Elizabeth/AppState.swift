@@ -19,85 +19,85 @@ typealias EnvironmentData = (name: String, variables: EnvironmentVariables)
     // refactor
     // environments 2
     var environments2: [EnvironmentData] = []
-
-    var collections: [RequestItem] = []
-
+    
+    // collection types: Array - Array Type Shorthand Syntax
+    // collection types: Array - Creating an Empty Array
+    var collections: [CollectionItem] = []
+    
     init() {
-        // mock data
-        environments.append(contentsOf: ["Local", "Production"])
-        environments2.append((name: "Globals", variables: [:]))
+        // collection types: Array - Appending an Array
         collections.append(contentsOf: [
-            RequestItem(
+            .collection(
                 id: UUID(),
-                name: "YUNA REST API",
-                description: "test",
+                name: "User APIs",
+                description: "User management endpoints",
                 children: [
-                    RequestItem(
+                    .request(
                         id: UUID(),
-                        name: "Users",
-                        description: "Users",
-                        children: [
-                            RequestItem(
-                                id: UUID(),
-                                name: "Get users",
-                                data: RequestData(method: .get, url: "https://httpbin.org/get")
-
-                            ),
-                            RequestItem(
-                                id: UUID(),
-                                name: "Get user by id",
-                                data: RequestData(method: .get, url: "https://httpbin.org/get")
-
-                            ),
-                            RequestItem(
-                                id: UUID(),
-                                name: "Create user",
-                                data: RequestData(method: .post, url: "https://httpbin.org/post")
-
-                            ),
-                            RequestItem(
-                                id: UUID(),
-                                name: "Update user",
-                                data: RequestData(method: .patch, url: "localhost/v1/users")
-
-                            ),
-                            RequestItem(
-                                id: UUID(),
-                                name: "Delete user",
-                                data: RequestData(method: .delete, url: "localhost/v1/users")
-                            )
-                        ]
+                        name: "Get User",
+                        description: "Fetch user by ID",
+                        data: (
+                            UUID(), .get, "https://httpbin.org/get",
+                            buildHeaders(("Accept", "application/json")),
+                            nil, nil,
+                            .oauth(prefix: "Bearer", token: "test")
+                        )
                     ),
-                    RequestItem(
+                    .request(
                         id: UUID(),
-                        name: "Authentication",
-                        description: "Users",
+                        name: "Create User",
+                        description: "Create new user",
+                        data: (
+                            UUID(), .post, "https://httpbin.org/post",
+                            buildHeaders(("Content-Type", "application/json")),
+                            nil, nil,
+                            .basic(username: "test", password: "test")
+                        )
+                    ),
+                    .request(
+                        id: UUID(),
+                        name: "Delete User",
+                        description: "Remove user account",
+                        data: (
+                            UUID(), .delete, "https://httpbin.org/delete",
+                            nil, nil, nil,
+                            .oauth(prefix: "Bearer", token: "test")
+                        )
+                    )
+                ]
+            ),
+            .collection(
+                id: UUID(),
+                name: "Product APIs",
+                description: "Product catalog",
+                children: [
+                    .request(
+                        id: UUID(),
+                        name: "List Products",
+                        description: "Get all products",
+                        data: (
+                            UUID(), .get, "https://httpbin.org/get",
+                            nil, nil,
+                            buildParams(("limit", "10"), ("page", "1")),
+                            .apiKey(key: "test", headerName: "X-API-Key")
+                        )
+                    ),
+                    .collection(
+                        id: UUID(),
+                        name: "Product CRUD",
+                        description: "Operations",
                         children: [
-                            RequestItem(
+                            .request(
                                 id: UUID(),
-                                name: "Sign-in",
-                                data: RequestData(method: .post, url: "localhost/v1/auth/sign-in")
-
-                            ),
-                            RequestItem(
-                                id: UUID(),
-                                name: "Sign-up",
-                                data: RequestData(method: .post, url: "localhost/v1/auth/sign-up")
+                                name: "Update Product",
+                                description: "Full update",
+                                data: (UUID(), .put, "https://httpbin.org/put", nil, nil, nil, .none)
                             )
                         ]
                     )
                 ]
-            ),
-            RequestItem(
-                id: UUID(),
-                name: "Empty Collection"
-            ),
-            RequestItem(
-                id: UUID(),
-                name: "Test",
-                description: "Just for test",
-                data: RequestData(method: .get, url: "https://httpbin.org/get")
             )
-        ])
+        ]
+        )
     }
 }

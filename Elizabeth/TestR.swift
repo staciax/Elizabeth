@@ -316,7 +316,7 @@ struct CollectionItemView2: View {
 }
 
 struct TestRView: View {
-    @Environment(AppState2.self) var appState
+    @Environment(AppState.self) var appState
 
     @Binding var selectedId: UUID?
 
@@ -369,6 +369,6 @@ struct TestRView: View {
 
 #Preview {
     @Previewable @State var selectedId: UUID?
-    @Previewable @State var appState = AppState2()
+    @Previewable @State var appState = AppState()
     TestRView(selectedId: $selectedId).environment(appState)
 }
