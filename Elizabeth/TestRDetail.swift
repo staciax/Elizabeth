@@ -103,10 +103,7 @@ struct TestRDetail: View {
             case .collection(_, let name, let description, let children):
                 VStack(alignment: .leading, spacing: 4) {
                     Text(name).font(.title2).bold()
-                    HStack(alignment: .top) {
-                        Text(description).font(.body)
-                        Spacer()
-                    }
+                    Text(description).font(.body)
 
                     Divider()
 
