@@ -15,6 +15,7 @@ This project was developed as part of a Swift programming course, covering 8 fun
 ## Requirements
 
 macOS 15.7 or later
+
 Xcode 26.2 or later
 
 ## Check List
