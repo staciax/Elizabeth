@@ -2,7 +2,19 @@
 
 Elizabeth is an API testing tool written in Swift and SwiftUI.
 
+This project was developed as part of a Swift programming course, covering 8 fundamental chapters: The Basics, Basic Operators, Strings and Characters, Collection Types, Control Flow, Functions, Closures, and Enumerations.
+
+![Screenshot](assets/screenshot-1.png)
+
+> [!IMPORTANT]  
+> This is intentionally kept simple for now.  
+> The project is limited to the first 8 chapters, so a lot of core stuff is missing.  
+>  
+> I'll clean this up and add more later.
+
 ## Check List
+
+Checklist tracking Swift concepts from The Swift Programming Language guide. Each topic represents a chapter with practical examples in the app.
 
 **The Basics**
 - [x] Declaring Constants and Variable
