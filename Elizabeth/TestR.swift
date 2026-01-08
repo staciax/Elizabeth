@@ -141,11 +141,13 @@ struct CollectionItemView2: View {
     // state
     // เมื่อ expand collection
     @State private var isExpanded: Bool = false
+    
     // เมื่อ hover collection
     @State private var isHovered: Bool = false
 
     // เมื่อ กำลังแก้ไขชื่อ และ กำลังโฟกัส แก้ไขชื่อ
     @State private var isRenaming: Bool = false
+    
     @FocusState private var isFocused: Bool
 
     var body: some View {
@@ -270,6 +272,7 @@ struct CollectionItemView2: View {
                 if isRenaming {
                     TextField("Name", text: nameBinding)
                         .textFieldStyle(.plain)
+                        .font(.body)
                         .focused($isFocused)
                         .onSubmit { isRenaming = false }
                         .onChange(of: isFocused) {
@@ -322,6 +325,7 @@ struct TestRView: View {
 
         VStack(alignment: .leading) {
             HStack {
+                
                 let createNewCollection: () -> Void = {
                     // the basics: Semicolons
                     let newCollection = addCollection(); selectedId = newCollection.id; bindableAppState.collections.append(newCollection.item)
@@ -329,7 +333,7 @@ struct TestRView: View {
                 
                 // control flow: Checking API Availability
                 if #available(macOS 26.0, *) { // 'glassEffect(_:in:)' is only available in macOS 26.0 or newer
-                    Button(action: { createNewCollection() }) {
+                    Button(action: createNewCollection) {
                         Label("", systemImage: "plus")
                             .labelStyle(.iconOnly)
                     }
