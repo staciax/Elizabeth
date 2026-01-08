@@ -49,7 +49,7 @@ func normalizeURL(_ inputUrl: String) -> String {
     if url.isEmpty { return "" }
     
     // ลบ whitespace ช่องว่าง ส่วนท้าย ออกให้หมด
-
+    
     // control flow: While Loops
     while !url.isEmpty {
         // strings and characters: Accessing and Modifying a String - String Indices
@@ -365,7 +365,7 @@ struct TestRDetail: View {
                     case .body:
                         HStack {
                             Picker("", selection: $selectedBodyType) {
-                                ForEach(BodyType.allCases, id: \.self) {
+                                ForEach(BodyType.allCases) {
                                     Text($0.rawValue).tag($0)
                                 }
                             }
@@ -499,6 +499,8 @@ struct TestRDetail: View {
 
                         // ทำการ http request
                         response = await sendHttpRequest2(requestData)
+                        
+            
                     }
 
                 }) {
