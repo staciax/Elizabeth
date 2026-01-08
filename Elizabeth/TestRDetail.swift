@@ -187,7 +187,7 @@ struct TestRDetail: View {
 
                     switch selectedSection {
                     case .docs:
-                        Text("Docs")
+                        Text(description).padding(4)
                     case .params:
                         let paramsBinding = Binding<[String: String]>(
                             get: { data.params ?? [:] },
