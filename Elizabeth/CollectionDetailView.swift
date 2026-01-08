@@ -1,5 +1,5 @@
 //
-//  TestRDetail.swift
+//  CollectionDetailView.swift
 //  Elizabeth
 //
 //  Created by STACiA on 5/1/2569 BE.
@@ -49,7 +49,7 @@ func normalizeURL(_ inputUrl: String) -> String {
     if url.isEmpty { return "" }
     
     // ลบ whitespace ช่องว่าง ส่วนท้าย ออกให้หมด
-
+    
     // control flow: While Loops
     while !url.isEmpty {
         // strings and characters: Accessing and Modifying a String - String Indices
@@ -76,7 +76,7 @@ func normalizeURL(_ inputUrl: String) -> String {
     return url
 }
 
-struct TestRDetail: View {
+struct CollectionDetailView: View {
     @Binding var item: CollectionItem
 
     // state สำหรับสลับหน้า request กับ response
@@ -103,10 +103,7 @@ struct TestRDetail: View {
             case .collection(_, let name, let description, let children):
                 VStack(alignment: .leading, spacing: 4) {
                     Text(name).font(.title2).bold()
-                    HStack(alignment: .top) {
-                        Text(description).font(.body)
-                        Spacer()
-                    }
+                    Text(description).font(.body)
 
                     Divider()
 
@@ -187,7 +184,7 @@ struct TestRDetail: View {
 
                     switch selectedSection {
                     case .docs:
-                        Text("Docs")
+                        Text(description).padding(4)
                     case .params:
                         let paramsBinding = Binding<[String: String]>(
                             get: { data.params ?? [:] },
@@ -365,7 +362,7 @@ struct TestRDetail: View {
                     case .body:
                         HStack {
                             Picker("", selection: $selectedBodyType) {
-                                ForEach(BodyType.allCases, id: \.self) {
+                                ForEach(BodyType.allCases) {
                                     Text($0.rawValue).tag($0)
                                 }
                             }
@@ -499,6 +496,8 @@ struct TestRDetail: View {
 
                         // ทำการ http request
                         response = await sendHttpRequest2(requestData)
+                        
+            
                     }
 
                 }) {
@@ -551,5 +550,5 @@ struct TestRDetail: View {
             )
         )]
     )
-    TestRDetail(item: $item)
+    CollectionDetailView(item: $item)
 }

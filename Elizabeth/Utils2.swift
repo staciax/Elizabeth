@@ -1,5 +1,5 @@
 //
-//  Utils2.swift
+//  Utils.swift
 //  Elizabeth
 //
 //  Created by STACiA on 5/1/2569 BE.
@@ -256,7 +256,7 @@ func getDefaultHeaders() -> [String: String] {
 
 // the basics: Integers - Int
 let httpStatus: [Int: String] = [
-    // 2xx Informational responses
+    // 1xx Informational responses
     100: "Continue",
     101: "Switching Protocols",
     102: "Processing",
