@@ -8,8 +8,8 @@
 import Observation
 import SwiftUI
 
-typealias EnvironmentVariables = [String: String]
-typealias EnvironmentData = (name: String, variables: EnvironmentVariables)
+//typealias EnvironmentVariables = [String: String]
+//typealias EnvironmentData = (name: String, variables: EnvironmentVariables)
 
 @Observable class AppState {
     // environments
@@ -18,7 +18,7 @@ typealias EnvironmentData = (name: String, variables: EnvironmentVariables)
 
     // refactor
     // environments 2
-    var environments2: [EnvironmentData] = []
+//    var environments2: [EnvironmentData] = []
     
     // collection types: Array - Array Type Shorthand Syntax
     // collection types: Array - Creating an Empty Array
