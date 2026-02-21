@@ -217,3 +217,8 @@ Checklist tracking Swift concepts from The Swift Programming Language guide. Eac
 - https://developer.apple.com/documentation/swiftui/environment
 - https://developer.apple.com/documentation/SwiftUI/Applying-Liquid-Glass-to-custom-views
 - https://developer.apple.com/documentation/swiftui/progressview
+
+## License
+This project is licensed under the Mozilla Public License Version 2.0 (MPL-2.0).
+
+See the [LICENSE](LICENSE) file for details.
